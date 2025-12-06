@@ -44,7 +44,7 @@ function getImage($id) {
 
     <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div class="px-6 py-4 flex items-center gap-4 max-w-2xl mx-auto">
-            <a href="/kelompok/kelompok_04/public/pasien/dashboard.php"
+            <a href="dashboard.php"
                class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 hover:bg-gray-200 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" viewBox="0 0 512 512">
                     <path d="M328 112 184 256l144 144" fill="none" stroke="currentColor" stroke-width="48"
