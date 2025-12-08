@@ -53,7 +53,8 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
 
     <div class="max-w-2xl mx-auto px-6 py-8 space-y-8">
 
-        <div class="bg-green-500 text-white rounded-2xl p-6 flex items-center gap-4 shadow-md">
+<div class="rounded-2xl p-6 text-white mb-6 shadow-md bg-gradient-to-r"
+  style="background-image: linear-gradient(to right, #45BC7D, #3aa668);">
 
             <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="currentColor" viewBox="0 0 512 512">
@@ -114,7 +115,8 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
         </div>
 
         <a href="profil_edit.php"
-           class="block text-center bg-green-500 text-white py-3 rounded-xl shadow-md hover:bg-green-600 transition">
+           class="block text-center bg-gradient-to-r text-white py-3 rounded-xl shadow-md hover:bg-green-600 transition"
+           style="background-image: linear-gradient(to right, #45BC7D, #3aa668);">
             Edit Profil
         </a>
 

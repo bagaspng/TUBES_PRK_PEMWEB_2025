@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: dokter.php');
+        header('Location: data_dokter.php');
         exit;
     }
 
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: dokter.php');
+        header('Location: data_dokter.php');
         exit;
     }
 
@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: dokter.php');
+        header('Location: data_dokter.php');
         exit;
     }
 }
