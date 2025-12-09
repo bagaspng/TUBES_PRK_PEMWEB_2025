@@ -1,5 +1,5 @@
 <?php
-// Sidebar reusable untuk Admin Panel
+// Sidebar Admin Panel
 ?>
 
 <style>
@@ -61,13 +61,13 @@
         <!-- Master Data -->
         <p class="menu-title">Master Data</p>
 
-        <a href="dokter.php"
+        <a href="data_dokter.php"
             class="nav-item <?= ($active === 'dokter') ? 'nav-active' : '' ?>">
             <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-500 flex items-center justify-center">Dr</span>
             Data Dokter
         </a>
 
-        <a href="poli.php"
+        <a href="data_poli.php"
             class="nav-item <?= ($active === 'poli') ? 'nav-active' : '' ?>">
             <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-500 flex items-center justify-center">Pl</span>
             Data Poli
@@ -79,7 +79,7 @@
             Jadwal Praktik
         </a>
 
-        <a href="pasien.php"
+        <a href="data_pasien.php"
             class="nav-item <?= ($active === 'pasien') ? 'nav-active' : '' ?>">
             <span class="w-6 h-6 rounded-md bg-pink-100 text-pink-500 flex items-center justify-center">Ps</span>
             Data Pasien
@@ -103,7 +103,7 @@
         <!-- Pengaturan -->
         <p class="menu-title">Pengaturan</p>
 
-        <a href="profile.php"
+        <a href="profil.php"
             class="nav-item <?= ($active === 'profil') ? 'nav-active' : '' ?>">
             <span class="w-6 h-6 rounded-md bg-gray-100 text-gray-600 flex items-center justify-center">Pr</span>
             Profil

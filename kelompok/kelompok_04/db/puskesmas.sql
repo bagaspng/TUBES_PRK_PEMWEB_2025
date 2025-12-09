@@ -59,7 +59,7 @@ CREATE TABLE `dokter` (
   `id_dokter` int NOT NULL AUTO_INCREMENT,
   `id_user` int NOT NULL,
   `id_poli` int NOT NULL,
-  `kode_dokter` varchar(45) NOT NULL,
+  `kode_dokter` varchar(45) NOT NULL UNIQUE,
   `nama_dokter` varchar(100) NOT NULL,
   `spesialis` varchar(100) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
@@ -120,8 +120,9 @@ DROP TABLE IF EXISTS `pasien`;
 CREATE TABLE `pasien` (
   `id_pasien` int NOT NULL AUTO_INCREMENT,
   `id_user` int NOT NULL,
-  `no_rm` varchar(45) NOT NULL,
-  `nik` varchar(45) NOT NULL,
+  `no_rm` varchar(45) NOT NULL UNIQUE,
+  `nik` varchar(45) NOT NULL UNIQUE,
+  `no_bpjs` VARCHAR(20) NULL UNIQUE
   `nama_lengkap` varchar(100) NOT NULL,
   `tanggal_lahir` date NOT NULL,
   `jenis_kelamin` char(1) NOT NULL,

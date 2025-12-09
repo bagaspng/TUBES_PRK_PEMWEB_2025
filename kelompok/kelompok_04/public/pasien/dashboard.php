@@ -1,11 +1,10 @@
 <?php
-// public/pasien/dashboard.php
 
 session_start();
 require_once __DIR__ . '/../../src/config/database.php';
 
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'pasien') {
-    header('Location: /kelompok/kelompok_04/public/login.php');
+    header('Location: ../login.php');
     exit;
 }
 
@@ -182,7 +181,6 @@ $mapHari = [
 ];
 $hariEnumToday = $mapHari[$hariIdx] ?? 'Senin';
 
-// Jadwal poli
 $sqlJadwalPoli = "SELECT DISTINCT p.nama_poli, j.jam_mulai, j.jam_selesai
                   FROM jadwal_praktik j
                   JOIN dokter d ON j.id_dokter = d.id_dokter
@@ -198,7 +196,6 @@ while ($row = $resJPoli->fetch_assoc()) {
 }
 $stmtJPoli->close();
 
-// Jadwal dokter
 $sqlJadwalDokter = "SELECT d.nama_dokter, p.nama_poli, j.jam_mulai, j.jam_selesai
                     FROM jadwal_praktik j
                     JOIN dokter d ON j.id_dokter = d.id_dokter
@@ -214,7 +211,6 @@ while ($row = $resJDok->fetch_assoc()) {
 }
 $stmtJDok->close();
 
-// Pengumuman / Artikel 
 $sqlPeng = "SELECT id_pengumuman, judul, isi, tanggal
             FROM pengumuman
             WHERE status = 'publish'
@@ -227,7 +223,6 @@ while ($row = $resPeng->fetch_assoc()) {
     $artikel[] = $row;
 }
 
-// Rekam medis 
 $sqlRM = "SELECT r.id_rekam, r.tanggal_kunjungan, r.diagnosa, d.nama_dokter
           FROM rekam_medis r
           JOIN dokter d ON r.id_dokter = d.id_dokter
@@ -280,12 +275,12 @@ $dokterByPoliJson = json_encode($dokterByPoli);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-gray-50">
-    <!-- Top Navbar -->
+
     <div class="bg-white border-b border-gray-100 sticky top-0 z-10">
         <div class="px-6 py-4 flex justify-between items-center max-w-2xl mx-auto">
             <h2 class="text-gray-800 font-semibold">Puskesmas</h2>
-            <a href="/kelompok/kelompok_04/public/pasien/profil.php">
-                <!-- Icon profil sederhana -->
+            <a href="profil.php">
+
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-600" viewBox="0 0 512 512" fill="currentColor">
                     <path d="M256 256a112 112 0 1 0-112-112 112.13 112.13 0 0 0 112 112Zm0 32c-70.7 0-208 35.82-208 107.5 0 21.39 8.35 36.5 29.74 36.5h356.52C455.65 432 464 416.89 464 395.5 464 323.82 326.7 288 256 288Z"/>
                 </svg>
@@ -294,7 +289,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
     </div>
 
     <div class="px-6 py-6 max-w-2xl mx-auto space-y-8">
-        <!-- Greeting -->
+
         <div>
             <h1 class="text-xl font-semibold text-gray-800 mb-1">
                 Halo, <?php echo htmlspecialchars($pasien['nama_lengkap']); ?>
@@ -302,7 +297,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             <p class="text-gray-500 text-sm">Status layanan & informasi kesehatan Anda.</p>
         </div>
 
-        <!-- Alert Booking -->
+
         <?php if ($bookingError): ?>
             <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
                 <?php echo htmlspecialchars($bookingError); ?>
@@ -313,17 +308,16 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             </div>
         <?php endif; ?>
 
-        <!-- Quick Actions -->
         <div>
             <div class="grid grid-cols-4 gap-4">
-                <!-- Ambil Antrian -->
+
                 <button
                     type="button"
                     onclick="openAntrianModal()"
                     class="flex flex-col items-center gap-2"
                 >
                     <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <!-- Calendar icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
                             <rect x="48" y="80" width="416" height="384" rx="48" ry="48" fill="none" stroke="currentColor" stroke-width="32"/>
                             <path d="M128 48v64M384 48v64" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
@@ -333,10 +327,9 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     <span class="text-xs text-gray-700 text-center">Antri</span>
                 </button>
 
-                <!-- Status Antrian (link ke section) -->
                 <a href="#status-antrian" class="flex flex-col items-center gap-2">
                     <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <!-- Time icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Zm0 96H224V336h32Z"/>
                         </svg>
@@ -344,10 +337,9 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     <span class="text-xs text-gray-700 text-center">Status</span>
                 </a>
 
-                <!-- Rekam Medis -->
-                <a href="/kelompok/kelompok_04/public/pasien/rekam_medis.php" class="flex flex-col items-center gap-2">
+                <a href="rekam_medis.php" class="flex flex-col items-center gap-2">
                     <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <!-- Document icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M368 64H144a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V128ZM192 192h128M192 256h96M192 320h64" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
                         </svg>
@@ -355,10 +347,9 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     <span class="text-xs text-gray-700 text-center">Rekam</span>
                 </a>
 
-                <!-- Artikel -->
-                <a href="/kelompok/kelompok_04/public/pasien/pengumuman.php" class="flex flex-col items-center gap-2">
+                <a href="pengumuman.php" class="flex flex-col items-center gap-2">
                     <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <!-- Newspaper icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M96 112h320v288a32 32 0 0 1-32 32H128a32 32 0 0 1-32-32Z" fill="none" stroke="currentColor" stroke-width="32"/>
                             <path d="M160 160h192M160 208h192M160 256h128" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
@@ -369,7 +360,6 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             </div>
         </div>
 
-        <!-- Status Antrian -->
         <div id="status-antrian">
         <?php if ($hasQueue): ?>
             <div class="bg-gradient-to-r from-[#45BC7D] to-[#3aa668] rounded-2xl p-6 text-white shadow-md">
@@ -389,7 +379,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                 </div>
                 <div class="space-y-2 text-sm">
                     <div class="flex items-center gap-2">
-                        <!-- Time icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Z"/>
                         </svg>
@@ -400,7 +390,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     </div>
                     <?php if ($antrianSaatIni !== null): ?>
                     <div class="flex items-center gap-2">
-                        <!-- Check icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48Zm95.6 145.6-112 112a16 16 0 0 1-22.6 0l-56-56a16 16 0 0 1 22.6-22.6L232 274.34l100.69-100.68a16 16 0 0 1 22.6 22.6Z"/>
                         </svg>
@@ -413,7 +403,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
                 <div class="flex flex-col items-center text-center">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <!-- Alert icon -->
+
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M448 256c0 106-86 192-192 192S64 362 64 256 150 64 256 64s192 86 192 192Zm-208-96v112h32V160Zm0 160v32h32V320Z"/>
                         </svg>
@@ -433,11 +423,9 @@ $dokterByPoliJson = json_encode($dokterByPoli);
         <?php endif; ?>
         </div>
 
-        <!-- Jadwal layanan hari ini -->
         <div>
             <h3 class="text-gray-800 mb-4 font-semibold">Jadwal Layanan Hari Ini (<?php echo $hariEnumToday; ?>)</h3>
 
-            <!-- Poli -->
             <div class="mb-4">
                 <p class="text-sm text-gray-600 mb-3">Poli</p>
                 <div class="flex gap-3 overflow-x-auto pb-2">
@@ -445,11 +433,11 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                         <?php foreach ($jadwalPoli as $jp): ?>
                             <div class="bg-white rounded-xl p-4 min-w-[160px] shadow-sm border border-gray-100">
                                 <div class="flex items-start justify-between mb-2">
-                                    <!-- Medkit icon -->
+
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#45BC7D]" viewBox="0 0 512 512" fill="currentColor">
                                         <path d="M352 96h80a48 48 0 0 1 48 48v256a48 48 0 0 1-48 48H80a48 48 0 0 1-48-48V144a48 48 0 0 1 48-48h80V80a48 48 0 0 1 48-48h96a48 48 0 0 1 48 48ZM208 80v16h96V80Z"/><path d="M296 208h-40v-40h-32v40h-40v32h40v40h32v-40h40Z"/>
                                     </svg>
-                                    <!-- Check icon -->
+
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#45BC7D]" viewBox="0 0 512 512" fill="currentColor">
                                         <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48Zm95.6 145.6-112 112a16 16 0 0 1-22.6 0l-56-56a16 16 0 0 1 22.6-22.6L232 274.34l100.69-100.68a16 16 0 0 1 22.6 22.6Z"/>
                                     </svg>
@@ -466,7 +454,6 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                 </div>
             </div>
 
-            <!-- Dokter -->
             <div>
                 <p class="text-sm text-gray-600 mb-3">Dokter Bertugas</p>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-100">
@@ -493,19 +480,18 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             </div>
         </div>
 
-        <!-- Artikel & Pengumuman -->
         <div>
             <h3 class="text-gray-800 mb-4 font-semibold">Artikel & Pengumuman</h3>
             <div class="space-y-3">
                 <?php if ($artikel): ?>
                     <?php foreach ($artikel as $item): ?>
-                        <a href="/kelompok/kelompok_04/public/pasien/pengumuman_detail.php?id=<?php echo $item['id_pengumuman']; ?>"
+                        <a href="pengumuman_detail.php?id=<?php echo $item['id_pengumuman']; ?>"
                            class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow block">
                             <div class="flex justify-between items-start mb-2">
                                 <p class="text-sm text-gray-800 pr-4">
                                     <?php echo htmlspecialchars($item['judul']); ?>
                                 </p>
-                                <!-- Chevron icon -->
+
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 flex-shrink-0" viewBox="0 0 512 512" fill="currentColor">
                                     <path d="M184 112l144 144-144 144"/>
                                 </svg>
@@ -524,18 +510,17 @@ $dokterByPoliJson = json_encode($dokterByPoli);
             </div>
         </div>
 
-        <!-- Rekam Medis -->
         <div class="pb-10">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-gray-800 font-semibold">Rekam Medis Terakhir</h3>
-                <a href="/kelompok/kelompok_04/public/pasien/rekam_medis.php" class="text-xs text-[#496A9A] hover:underline">
+                <a href="rekam_medis.php" class="text-xs text-[#496A9A] hover:underline">
                     Lihat Semua
                 </a>
             </div>
             <div class="space-y-3">
                 <?php if ($rekamMedis): ?>
                     <?php foreach ($rekamMedis as $rm): ?>
-                        <a href="/kelompok/kelompok_04/public/pasien/rekam_medis_detail.php?id=<?php echo $rm['id_rekam']; ?>"
+                        <a href="rekam_medis_detail.php?id=<?php echo $rm['id_rekam']; ?>"
                            class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 block hover:shadow-md transition-shadow">
                             <div class="flex justify-between items-start">
                                 <div class="flex-1">
@@ -549,7 +534,7 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                                         <?php echo htmlspecialchars($rm['nama_dokter']); ?>
                                     </p>
                                 </div>
-                                <!-- Chevron -->
+
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 flex-shrink-0 mt-1" viewBox="0 0 512 512" fill="currentColor">
                                     <path d="M184 112l144 144-144 144"/>
                                 </svg>
@@ -563,29 +548,23 @@ $dokterByPoliJson = json_encode($dokterByPoli);
         </div>
     </div>
 
-    <!-- Modal Ambil Antrian -->
     <div id="antrianModal" class="fixed inset-0 bg-black/50 items-center justify-center z-50 px-6 hidden">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-xl">
-            <!-- Header -->
+  
             <div class="flex items-center justify-between p-6 border-b border-gray-100">
                 <h2 class="text-gray-800 font-semibold">Ambil Antrian</h2>
                 <button
                     type="button"
                     onclick="closeAntrianModal()"
-                    class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                    <!-- Close icon -->
+                    class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" viewBox="0 0 512 512" fill="currentColor">
                         <path d="M368 368 144 144M368 144 144 368" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
                     </svg>
                 </button>
             </div>
-
-            <!-- Content -->
             <form method="post" action="" class="p-6 space-y-5">
                 <input type="hidden" name="action" value="ambil_antrian">
 
-                <!-- Poli -->
                 <div>
                     <label class="block text-sm text-gray-700 mb-2">Pilih Poli</label>
                     <select
@@ -603,7 +582,6 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     </select>
                 </div>
 
-                <!-- Dokter -->
                 <div>
                     <label class="block text-sm text-gray-700 mb-2">Pilih Dokter</label>
                     <select
@@ -617,7 +595,6 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     </select>
                 </div>
 
-                <!-- Tanggal -->
                 <div>
                     <label class="block text-sm text-gray-700 mb-2">Pilih Tanggal</label>
                     <input
@@ -629,7 +606,6 @@ $dokterByPoliJson = json_encode($dokterByPoli);
                     />
                 </div>
 
-                <!-- Submit -->
                 <button
                     type="submit"
                     class="w-full bg-[#45BC7D] text-white py-3 rounded-xl hover:bg-[#3aa668] transition-colors shadow-md text-sm font-semibold"
