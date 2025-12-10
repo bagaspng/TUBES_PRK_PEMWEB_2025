@@ -3,7 +3,6 @@
 session_start();
 
 require_once __DIR__ . '/../../src/config/database.php';
-require_once __DIR__ . '/../../src/helpers/icon_helper.php';
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../login.php');
@@ -90,47 +89,19 @@ function waktuRelatif($datetime) {
     <meta charset="UTF-8">
     <title>Admin Dashboard - Puskesmas</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .icon-placeholder {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.25rem;
-            height: 1.25rem;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            border-radius: 0.375rem;
-            font-size: 0.625rem;
-            font-weight: 600;
-            color: #64748b;
-        }
-        .icon-placeholder::before {
-            content: '?';
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-    </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
 <div class="min-h-screen flex">
+    <!-- SIDEBAR (include reusable file) -->
     <?php
+        // Tandai menu aktif untuk sidebar
         $active = 'dashboard';
         include __DIR__ . '/sidebar.php';
     ?>
 
+    <!-- MAIN AREA -->
     <div class="flex-1 flex flex-col">
         <header class="w-full px-4 md:px-8 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
             <div>
@@ -140,43 +111,43 @@ function waktuRelatif($datetime) {
         </header>
 
        <main class="flex-1 flex flex-col px-4 md:px-6 py-6 w-full">
+            <!-- STAT CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 w-full">
-                
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center mb-3 text-xl">
-                        <?= render_icon('user-doctor', 'fa', '', 'Dokter') ?>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center mb-3 text-sm font-semibold">
+                        Dr
                     </div>
                     <div class="text-2xl text-gray-800 mb-1"><?php echo $totalDokter; ?></div>
                     <p class="text-xs text-gray-600">Total Dokter</p>
                 </div>
 
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-green-50 text-green-700 rounded-xl flex items-center justify-center mb-3 text-xl">
-                        <?= render_icon('building', 'fa', '', 'Poli') ?>
+                    <div class="w-12 h-12 bg-green-50 text-green-700 rounded-xl flex items-center justify-center mb-3 text-sm font-semibold">
+                        Po
                     </div>
                     <div class="text-2xl text-gray-800 mb-1"><?php echo $totalPoli; ?></div>
                     <p class="text-xs text-gray-600">Total Poli</p>
                 </div>
 
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-purple-50 text-purple-700 rounded-xl flex items-center justify-center mb-3 text-xl">
-                        <?= render_icon('users', 'fa', '', 'Pasien') ?>
+                    <div class="w-12 h-12 bg-purple-50 text-purple-700 rounded-xl flex items-center justify-center mb-3 text-sm font-semibold">
+                        Ps
                     </div>
                     <div class="text-2xl text-gray-800 mb-1"><?php echo $totalPasien; ?></div>
                     <p class="text-xs text-gray-600">Total Pasien</p>
                 </div>
 
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-3 text-xl">
-                        <?= render_icon('clipboard-check', 'fa', '', 'Kunjungan') ?>
+                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-3 text-sm font-semibold">
+                        Kj
                     </div>
                     <div class="text-2xl text-gray-800 mb-1"><?php echo $kunjunganHariIni; ?></div>
                     <p class="text-xs text-gray-600">Kunjungan Hari Ini</p>
                 </div>
 
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center mb-3 text-xl">
-                        <?= render_icon('megaphone', 'fa', '', 'Pengumuman') ?>
+                    <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center mb-3 text-sm font-semibold">
+                        Pg
                     </div>
                     <div class="text-2xl text-gray-800 mb-1"><?php echo $totalPengumuman; ?></div>
                     <p class="text-xs text-gray-600">Pengumuman</p>
@@ -184,6 +155,7 @@ function waktuRelatif($datetime) {
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- AKTIVITAS TERBARU -->
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
                         <div class="p-6 border-b border-gray-100">
@@ -196,21 +168,15 @@ function waktuRelatif($datetime) {
                                 <div class="space-y-4">
                                     <?php foreach ($aktivitas as $act): ?>
                                         <div class="flex items-start gap-4">
-                                            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-base
+                                            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0
                                                 <?php
                                                     if ($act['tipe'] === 'pasien')      echo 'bg-green-100 text-green-600';
                                                     elseif ($act['tipe'] === 'pengumuman') echo 'bg-orange-100 text-orange-600';
                                                     else                                  echo 'bg-blue-100 text-blue-600';
                                                 ?>">
-                                                <?php 
-                                                    if ($act['tipe'] === 'pasien') {
-                                                        echo render_icon('user', 'fa', '', 'Pasien');
-                                                    } elseif ($act['tipe'] === 'pengumuman') {
-                                                        echo render_icon('megaphone', 'fa', '', 'Pengumuman');
-                                                    } else {
-                                                        echo render_icon('calendar', 'fa', '', 'Jadwal');
-                                                    }
-                                                ?>
+                                                <span class="text-xs font-semibold uppercase">
+                                                    <?php echo strtoupper(substr($act['tipe'],0,2)); ?>
+                                                </span>
                                             </div>
                                             <div class="flex-1">
                                                 <p class="text-sm text-gray-800">
@@ -228,23 +194,28 @@ function waktuRelatif($datetime) {
                     </div>
                 </div>
 
+                <!-- AKSI CEPAT -->
                 <div>
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
                         <div class="p-6 border-b border-gray-100">
                             <h2 class="text-gray-800 text-base font-semibold">Aksi Cepat</h2>
                         </div>
                         <div class="p-6 space-y-3">
-                            <a href="data_dokter.php?modal=create" class="bg-blue-700 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
+                            <a href="dokter_tambah.php" class="bg-blue-700 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
                                 <span>Tambah Dokter</span>
-                                <span class="ml-auto text-lg font-semibold"><?= render_icon('plus', 'fa', '', 'Tambah') ?></span>
+                                <span class="ml-auto text-lg font-semibold">+</span>
                             </a>
-                            <a href="data_poli.php?modal=create" class="bg-green-500 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
+                            <a href="poli_tambah.php" class="bg-green-500 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
                                 <span>Tambah Poli</span>
-                                <span class="ml-auto text-lg font-semibold"><?= render_icon('plus', 'fa', '', 'Tambah') ?></span>
+                                <span class="ml-auto text-lg font-semibold">+</span>
                             </a>
-                            <a href="pengumuman.php?modal=create" class="bg-red-500 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
+                            <a href="artikel_tambah.php" class="bg-purple-500 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
+                                <span>Tambah Artikel</span>
+                                <span class="ml-auto text-lg font-semibold">+</span>
+                            </a>
+                            <a href="pengumuman_tambah.php" class="bg-orange-500 text-white px-4 py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center gap-3 shadow-sm text-sm">
                                 <span>Tambah Pengumuman</span>
-                                <span class="ml-auto text-lg font-semibold"><?= render_icon('plus', 'fa', '', 'Tambah') ?></span>
+                                <span class="ml-auto text-lg font-semibold">+</span>
                             </a>
                         </div>
                     </div>
@@ -254,5 +225,8 @@ function waktuRelatif($datetime) {
     </div>
 </div>
 
+<script>
+
+</script>
 </body>
 </html>

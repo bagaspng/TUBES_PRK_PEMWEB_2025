@@ -1,6 +1,5 @@
 <?php
 // Sidebar Admin Panel
-require_once __DIR__ . '/../../src/helpers/icon_helper.php';
 ?>
 
 <style>
@@ -32,14 +31,11 @@ require_once __DIR__ . '/../../src/helpers/icon_helper.php';
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    .nav-item i {
-        width: 1.25rem;
-        text-align: center;
-    }
 </style>
 
 <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
 
+    <!-- HEADER -->
     <div class="px-6 py-6 border-b border-gray-100">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
@@ -52,63 +48,69 @@ require_once __DIR__ . '/../../src/helpers/icon_helper.php';
         </div>
     </div>
 
+    <!-- NAVIGATION -->
     <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
 
+        <!-- Dashboard -->
         <a href="dashboard.php"
             class="nav-item <?= ($active === 'dashboard') ? 'nav-active' : '' ?>">
-            <?= render_icon('home', 'fa', 'text-base', 'Dashboard') ?>
+            <span class="w-6 h-6 rounded-md bg-green-100 text-green-500 flex items-center justify-center">D</span>
             Dashboard
         </a>
 
-        <a href="rujukan.php"
-            class="nav-item <?= ($active === 'rujukan') ? 'nav-active' : '' ?>">
-            <?= render_icon('document', 'fa', 'text-base', 'Rujukan') ?>
-            Rujukan
-        </a>
-
+        <!-- Master Data -->
         <p class="menu-title">Master Data</p>
 
         <a href="data_dokter.php"
             class="nav-item <?= ($active === 'dokter') ? 'nav-active' : '' ?>">
-            <?= render_icon('user-doctor', 'fa', 'text-base', 'Data Dokter') ?>
+            <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-500 flex items-center justify-center">Dr</span>
             Data Dokter
         </a>
 
         <a href="data_poli.php"
             class="nav-item <?= ($active === 'poli') ? 'nav-active' : '' ?>">
-            <?= render_icon('building', 'fa', 'text-base', 'Data Poli') ?>
+            <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-500 flex items-center justify-center">Pl</span>
             Data Poli
         </a>
 
         <a href="jadwal_praktik.php"
             class="nav-item <?= ($active === 'jadwal') ? 'nav-active' : '' ?>">
-            <?= render_icon('calendar', 'fa', 'text-base', 'Jadwal Praktik') ?>
+            <span class="w-6 h-6 rounded-md bg-orange-100 text-orange-500 flex items-center justify-center">Jd</span>
             Jadwal Praktik
         </a>
 
         <a href="data_pasien.php"
             class="nav-item <?= ($active === 'pasien') ? 'nav-active' : '' ?>">
-            <?= render_icon('users', 'fa', 'text-base', 'Data Pasien') ?>
+            <span class="w-6 h-6 rounded-md bg-pink-100 text-pink-500 flex items-center justify-center">Ps</span>
             Data Pasien
         </a>
 
+        <!-- Informasi -->
         <p class="menu-title">Informasi</p>
 
         <a href="pengumuman.php"
             class="nav-item <?= ($active === 'pengumuman') ? 'nav-active' : '' ?>">
-            <?= render_icon('megaphone', 'fa', 'text-base', 'Pengumuman') ?>
+            <span class="w-6 h-6 rounded-md bg-red-100 text-red-500 flex items-center justify-center">Pg</span>
             Pengumuman
         </a>
 
+        <a href="artikel.php"
+            class="nav-item <?= ($active === 'artikel') ? 'nav-active' : '' ?>">
+            <span class="w-6 h-6 rounded-md bg-yellow-100 text-yellow-600 flex items-center justify-center">Ar</span>
+            Artikel Kesehatan
+        </a>
+
+        <!-- Pengaturan -->
         <p class="menu-title">Pengaturan</p>
 
         <a href="profil.php"
             class="nav-item <?= ($active === 'profil') ? 'nav-active' : '' ?>">
-            <?= render_icon('user', 'fa', 'text-base', 'Profil') ?>
+            <span class="w-6 h-6 rounded-md bg-gray-100 text-gray-600 flex items-center justify-center">Pr</span>
             Profil
         </a>
     </nav>
 
+    <!-- LOGOUT -->
     <div class="px-4 py-4 border-t border-gray-100">
         <form action="../logout.php" method="post">
             <button type="submit"

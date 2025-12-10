@@ -1,5 +1,5 @@
 <?php
-// public/admin/data_dokter.php
+// public/admin/dokter.php
 
 session_start();
 require_once __DIR__ . '/../../src/config/database.php';
@@ -21,6 +21,7 @@ function get_flash($type) {
     return null;
 }
 
+
 $poliklinik = [];
 $resPoli = $conn->query("SELECT id_poli, nama_poli FROM poli ORDER BY nama_poli ASC");
 if ($resPoli) {
@@ -38,21 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $spesialis   = trim($_POST['spesialis'] ?? '');
         $no_hp       = trim($_POST['no_hp'] ?? '');
         $email       = trim($_POST['email'] ?? '');
-        $username    = trim($_POST['username'] ?? '');
-        $password    = trim($_POST['password'] ?? '');
         $id_poli     = (int)($_POST['id_poli'] ?? 0);
 
-        if ($nama === '' || $kode === '' || $spesialis === '' || $no_hp === '' || $email === '' || $username === '' || $password === '' || !$id_poli) {
+        if ($nama === '' || $kode === '' || $spesialis === '' || $no_hp === '' || $email === '' || !$id_poli) {
             set_flash('error', 'Semua field bertanda * wajib diisi.');
         } else {
             $conn->begin_transaction();
             try {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $passwordDefault = 'dokter123'; 
+                $hash = password_hash($passwordDefault, PASSWORD_DEFAULT);
 
                 $sqlUser = "INSERT INTO users (username, password_hash, email, role, status, created_at, updated_at)
                             VALUES (?, ?, ?, 'dokter', 'active', NOW(), NOW())";
                 $stmtUser = $conn->prepare($sqlUser);
-                $stmtUser->bind_param('sss', $username, $hash, $email);
+                $stmtUser->bind_param('sss', $kode, $hash, $email);
                 $stmtUser->execute();
                 $id_user = $stmtUser->insert_id;
                 $stmtUser->close();
@@ -65,10 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtDok->close();
 
                 $conn->commit();
-                set_flash('success', 'Dokter baru berhasil ditambahkan. Username: ' . $username . ' | Password: ' . $password);
+                set_flash('success', 'Dokter baru berhasil ditambahkan. Default password: dokter123');
             } catch (Exception $e) {
                 $conn->rollback();
-                set_flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                set_flash('error', 'Terjadi kesalahan saat menyimpan data dokter.');
             }
         }
 
@@ -83,11 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $spesialis   = trim($_POST['spesialis'] ?? '');
         $no_hp       = trim($_POST['no_hp'] ?? '');
         $email       = trim($_POST['email'] ?? '');
-        $username    = trim($_POST['username'] ?? '');
-        $password    = trim($_POST['password'] ?? '');
         $id_poli     = (int)($_POST['id_poli'] ?? 0);
 
-        if (!$id_dokter || $nama === '' || $kode === '' || $spesialis === '' || $no_hp === '' || $email === '' || $username === '' || !$id_poli) {
+        if (!$id_dokter || $nama === '' || $kode === '' || $spesialis === '' || $no_hp === '' || $email === '' || !$id_poli) {
             set_flash('error', 'Semua field bertanda * wajib diisi.');
         } else {
             $conn->begin_transaction();
@@ -103,16 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($rowGet) {
                     $id_user = (int)$rowGet['id_user'];
 
-                    if ($password !== '') {
-                        $hash = password_hash($password, PASSWORD_DEFAULT);
-                        $sqlUser = "UPDATE users SET username = ?, password_hash = ?, email = ?, updated_at = NOW() WHERE id_user = ?";
-                        $stmtUser = $conn->prepare($sqlUser);
-                        $stmtUser->bind_param('sssi', $username, $hash, $email, $id_user);
-                    } else {
-                        $sqlUser = "UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id_user = ?";
-                        $stmtUser = $conn->prepare($sqlUser);
-                        $stmtUser->bind_param('ssi', $username, $email, $id_user);
-                    }
+                    $sqlUser = "UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id_user = ?";
+                    $stmtUser = $conn->prepare($sqlUser);
+                    $stmtUser->bind_param('ssi', $kode, $email, $id_user);
                     $stmtUser->execute();
                     $stmtUser->close();
 
@@ -125,18 +116,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmtDok->close();
 
                     $conn->commit();
-                    $msg = 'Data dokter berhasil diperbarui.';
-                    if ($password !== '') {
-                        $msg .= ' Password baru: ' . $password;
-                    }
-                    set_flash('success', $msg);
+                    set_flash('success', 'Data dokter berhasil diperbarui.');
                 } else {
                     $conn->rollback();
                     set_flash('error', 'Data dokter tidak ditemukan.');
                 }
             } catch (Exception $e) {
                 $conn->rollback();
-                set_flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                set_flash('error', 'Terjadi kesalahan saat memperbarui data dokter.');
             }
         }
 
@@ -184,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('success', 'Dokter berhasil dihapus.');
             } catch (Exception $e) {
                 $conn->rollback();
-                set_flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                set_flash('error', 'Terjadi kesalahan saat menghapus dokter.');
             }
         }
 
@@ -193,16 +180,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+//GET DATA 
+
 $search = trim($_GET['q'] ?? '');
 $searchSql = '';
 $params = [];
 $types = '';
 
 if ($search !== '') {
-    $searchSql = "WHERE d.nama_dokter LIKE ? OR d.spesialis LIKE ? OR p.nama_poli LIKE ? OR u.username LIKE ?";
+    $searchSql = "WHERE d.nama_dokter LIKE ? OR d.spesialis LIKE ? OR p.nama_poli LIKE ?";
     $like = '%' . $search . '%';
-    $params = [$like, $like, $like, $like];
-    $types = 'ssss';
+    $params = [$like, $like, $like];
+    $types = 'sss';
 }
 
 $sqlList = "
@@ -214,7 +203,6 @@ $sqlList = "
         d.spesialis,
         d.no_hp,
         u.email,
-        u.username,
         p.nama_poli,
         GROUP_CONCAT(
             CONCAT(j.hari, ' ', DATE_FORMAT(j.jam_mulai, '%H:%i'), '-', DATE_FORMAT(j.jam_selesai, '%H:%i'))
@@ -225,7 +213,7 @@ $sqlList = "
     JOIN poli p ON d.id_poli = p.id_poli
     LEFT JOIN jadwal_praktik j ON j.id_dokter = d.id_dokter
     $searchSql
-    GROUP BY d.id_dokter, d.kode_dokter, d.nama_dokter, d.spesialis, d.no_hp, u.email, u.username, p.nama_poli
+    GROUP BY d.id_dokter, d.kode_dokter, d.nama_dokter, d.spesialis, d.no_hp, u.email, p.nama_poli
     ORDER BY d.nama_dokter ASC
 ";
 
@@ -257,6 +245,7 @@ if (isset($_SESSION['user_id'])) {
     if ($resA) $adminName = $resA['username'];
     $qAdmin->close();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -275,6 +264,7 @@ if (isset($_SESSION['user_id'])) {
     ?>
 
     <div class="flex-1 flex flex-col">
+        <!-- Topbar-->
         <header class="w-full px-4 md:px-8 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-semibold text-gray-800">Data Dokter</h1>
@@ -287,6 +277,7 @@ if (isset($_SESSION['user_id'])) {
 
         <main class="flex-1 px-4 md:px-8 py-6 max-w-7xl mx-auto">
 
+            <!-- Flash Message -->
             <?php if ($msg = get_flash('success')): ?>
                 <div class="mb-4 px-4 py-3 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100">
                     <?php echo htmlspecialchars($msg); ?>
@@ -298,12 +289,13 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             <?php endif; ?>
 
+            <!-- Toolbar: Search + Add -->
             <div class="mb-6 flex flex-col md:flex-row items-center gap-4">
               <form method="get" class="flex-1 w-full">
                 <input
                   type="text"
                   name="q"
-                  placeholder="Cari dokter berdasarkan nama, username, spesialisasi atau poli..."
+                  placeholder="Cari dokter berdasarkan nama, spesialisasi atau poli..."
                   value="<?php echo htmlspecialchars($search); ?>"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 >
@@ -319,17 +311,86 @@ if (isset($_SESSION['user_id'])) {
               </div>
             </div>
 
-            <!-- Include Modal Form -->
-            <?php include __DIR__ . '/modals/modal_dokter.php'; ?>
+            <!-- Modal (hidden by default) -->
+            <div id="dokterModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40">
+              <div class="bg-white rounded-2xl w-full max-w-2xl p-6 mx-4">
+                <div class="flex items-center justify-between mb-4">
+                  <h2 id="modalTitle" class="text-base font-semibold text-gray-800">Tambah Dokter</h2>
+                  <button id="btnCloseModal" type="button" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
+                </div>
 
+                <form id="dokterForm" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input type="hidden" name="action" id="formAction" value="create">
+                  <input type="hidden" name="id_dokter" id="formId" value="">
+
+                  <!-- Nama -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                    <input type="text" name="nama_dokter" id="field_nama" required
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                  </div>
+
+                  <!-- Kode -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">NIP / Kode Dokter <span class="text-red-500">*</span></label>
+                    <input type="text" name="kode_dokter" id="field_kode" required
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                  </div>
+
+                  <!-- Spesialis -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">Spesialisasi <span class="text-red-500">*</span></label>
+                    <input type="text" name="spesialis" id="field_spesialis" required
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                  </div>
+
+                  <!-- Email -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
+                    <input type="email" name="email" id="field_email" required
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                  </div>
+
+                  <!-- Telepon -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">Nomor Telepon <span class="text-red-500">*</span></label>
+                    <input type="tel" name="no_hp" id="field_nohp" required
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                  </div>
+
+                  <!-- Poli -->
+                  <div>
+                    <label class="block text-sm text-gray-700 mb-2">Poli <span class="text-red-500">*</span></label>
+                    <select name="id_poli" id="field_poli" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                      <option value="">-- Pilih Poli --</option>
+                      <?php foreach ($poliklinik as $p): ?>
+                        <option value="<?php echo (int)$p['id_poli']; ?>"><?php echo htmlspecialchars($p['nama_poli']); ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="md:col-span-2 flex justify-end gap-3 pt-2">
+                    <button type="button" id="btnCancelForm" class="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl">Batal</button>
+                    <button type="submit" class="px-6 py-3 bg-green-500 text-white rounded-xl">Simpan</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Search + Table -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="p-6 border-b border-gray-100">
+                    <!-- Toolbar moved above -->
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-gray-50 border-b border-gray-100">
                             <tr>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Nama Dokter</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">NIP / Kode</th>
-                                <th class="px-6 py-4 text-left text-xs text-gray-600">Username Login</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Spesialisasi</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Poli</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Jadwal Praktik</th>
@@ -346,13 +407,6 @@ if (isset($_SESSION['user_id'])) {
                                         </td>
                                         <td class="px-6 py-4 text-gray-600">
                                             <?php echo htmlspecialchars($doctor['kode_dokter']); ?>
-                                        </td>
-                                        <td class="px-6 py-4 text-gray-700 font-medium">
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">
-                                                    <?php echo htmlspecialchars($doctor['username']); ?>
-                                                </span>
-                                            </div>
                                         </td>
                                         <td class="px-6 py-4 text-gray-600">
                                             <?php echo htmlspecialchars($doctor['spesialis']); ?>
@@ -379,7 +433,6 @@ if (isset($_SESSION['user_id'])) {
                                                     data-spesialis="<?php echo htmlspecialchars($doctor['spesialis'], ENT_QUOTES); ?>"
                                                     data-email="<?php echo htmlspecialchars($doctor['email'], ENT_QUOTES); ?>"
                                                     data-nohp="<?php echo htmlspecialchars($doctor['no_hp'], ENT_QUOTES); ?>"
-                                                    data-username="<?php echo htmlspecialchars($doctor['username'], ENT_QUOTES); ?>"
                                                     data-id-poli="<?php echo (int)($doctor['id_poli'] ?? 0); ?>">
                                                     Edit
                                                 </button>
@@ -397,7 +450,7 @@ if (isset($_SESSION['user_id'])) {
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="8" class="px-6 py-10 text-center text-gray-500 text-sm">
+                                    <td colspan="7" class="px-6 py-10 text-center text-gray-500 text-sm">
                                         Tidak ada data dokter.
                                     </td>
                                 </tr>
@@ -417,6 +470,68 @@ if (isset($_SESSION['user_id'])) {
         </main>
     </div>
 </div>
+
+<script>
+(function () {
+  const modal = document.getElementById('dokterModal');
+  const btnAdd = document.getElementById('btnAddDokter');
+  const btnClose = document.getElementById('btnCloseModal');
+  const btnCancel = document.getElementById('btnCancelForm');
+  const form = document.getElementById('dokterForm');
+  const formAction = document.getElementById('formAction');
+  const formId = document.getElementById('formId');
+  const modalTitle = document.getElementById('modalTitle');
+
+  function openModal() {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    // ensure focus at top
+    window.scrollTo(0,0);
+  }
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function clearForm() {
+    form.reset();
+    formAction.value = 'create';
+    formId.value = '';
+    modalTitle.textContent = 'Tambah Dokter';
+  }
+
+  if (btnAdd) {
+    btnAdd.addEventListener('click', function () {
+      clearForm();
+      openModal();
+    });
+  }
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+  // Edit buttons (delegation)
+  document.querySelectorAll('.edit-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const id = btn.getAttribute('data-id');
+      document.getElementById('field_nama').value = btn.getAttribute('data-nama') || '';
+      document.getElementById('field_kode').value = btn.getAttribute('data-kode') || '';
+      document.getElementById('field_spesialis').value = btn.getAttribute('data-spesialis') || '';
+      document.getElementById('field_email').value = btn.getAttribute('data-email') || '';
+      document.getElementById('field_nohp').value = btn.getAttribute('data-nohp') || '';
+      document.getElementById('field_poli').value = btn.getAttribute('data-id-poli') || '';
+      formAction.value = 'update';
+      formId.value = id;
+      modalTitle.textContent = 'Edit Dokter';
+      openModal();
+    });
+  });
+
+  // Close modal on clicking outside the inner box
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
+  });
+})();
+</script>
 
 </body>
 </html>

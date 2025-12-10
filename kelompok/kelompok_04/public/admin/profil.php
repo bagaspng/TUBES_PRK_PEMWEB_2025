@@ -23,6 +23,7 @@ function get_flash($type) {
 
 $idUser = (int)$_SESSION['user_id'];
 
+// Proses update profil
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update_profile') {
     $nama  = trim($_POST['nama'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -127,6 +128,7 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
                 </div>
             </div>
 
+            <!-- Info kontak -->
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
                 <h3 class="text-gray-800 mb-4 text-base font-semibold">Informasi Kontak</h3>
 
@@ -155,6 +157,7 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
                 </div>
             </div>
 
+            <!-- Tombol aksi -->
             <div class="space-y-3 mb-8">
                 <button
                     type="button"
@@ -180,7 +183,7 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
 </div>
 
 <div id="editModal"
-     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-6 hidden bg-black bg-opacity-40">
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-6 hidden">
     <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl">
         <div class="flex items-center justify-between p-6 border-b border-gray-100">
             <h2 class="text-gray-800 text-base font-semibold">Edit Profil</h2>
@@ -245,13 +248,54 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
     </div>
 </div>
 
-<?php
-    $logoutAction = '../logout.php'; 
-    include __DIR__ . '/../partials/logout_modal.php';
-?>
+<div id="logoutModal"
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-6 hidden">
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-xl">
+        <div class="p-6">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-red-600 text-3xl">!</span>
+            </div>
+            <h2 class="text-gray-800 text-center mb-2 text-base font-semibold">Konfirmasi Keluar</h2>
+            <p class="text-sm text-gray-600 text-center mb-6">
+                Apakah Anda yakin ingin keluar dari aplikasi?
+            </p>
+
+            <div class="flex gap-3">
+                <button
+                    type="button"
+                    onclick="closeLogoutModal()"
+                    class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl hover:bg-gray-200 transition-colors text-sm"
+                >
+                    Batal
+                </button>
+                <form method="post" action="../logout.php" class="flex-1">
+                    <button
+                        type="submit"
+                        class="w-full bg-red-600 text-white py-3 rounded-xl hover:bg-red-700 transition-colors text-sm"
+                    >
+                        Ya, Keluar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-function openEditModal() { document.getElementById('editModal').classList.remove('hidden'); }
-function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); }
+function openEditModal() {
+    document.getElementById('editModal').classList.remove('hidden');
+}
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+function openLogoutModal() {
+    document.getElementById('logoutModal').classList.remove('hidden');
+}
+function closeLogoutModal() {
+    document.getElementById('logoutModal').classList.add('hidden');
+}
 </script>
+
 </body>
 </html>
