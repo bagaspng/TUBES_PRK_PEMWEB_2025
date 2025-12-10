@@ -1,5 +1,5 @@
 <?php
-// public/admin/datapoli.php
+// public/admin/data_poli.php
 
 session_start();
 require_once __DIR__ . '/../../src/config/database.php';
@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Update poli
     if ($action === 'update') {
         $id_poli     = (int)($_POST['id_poli'] ?? 0);
         $nama        = trim($_POST['nama_poli'] ?? '');
@@ -78,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Delete poli
     if ($action === 'delete') {
         $id_poli = (int)($_POST['id_poli'] ?? 0);
 
@@ -118,9 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ==== DATA UNTUK TAMPILAN ====
-
-// search
 $search = trim($_GET['q'] ?? '');
 $params = [];
 $types  = '';
@@ -200,7 +195,6 @@ if (isset($_SESSION['user_id'])) {
     ?>
 
     <div class="flex-1 flex flex-col">
-        <!-- Topbar -->
         <header class="w-full px-4 md:px-8 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-semibold text-gray-800">Data Poli</h1>
@@ -213,7 +207,6 @@ if (isset($_SESSION['user_id'])) {
 
         <main class="flex-1 px-4 md:px-8 py-6 max-w-7xl mx-auto">
 
-            <!-- Flash -->
             <?php if ($msg = get_flash('success')): ?>
                 <div class="mb-4 px-4 py-3 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100">
                     <?php echo htmlspecialchars($msg); ?>
@@ -225,7 +218,6 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- Toolbar: Search + Add -->
             <div class="mb-6 flex flex-col md:flex-row items-center gap-4">
               <form method="get" class="flex-1 w-full">
                 <input
@@ -247,59 +239,10 @@ if (isset($_SESSION['user_id'])) {
               </div>
             </div>
 
-            <!-- Modal-->
-            <div id="poliModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40">
-              <div class="bg-white rounded-2xl w-full max-w-2xl p-6 mx-4">
-                <div class="flex items-center justify-between mb-4">
-                  <h2 id="poliModalTitle" class="text-base font-semibold text-gray-800">Tambah Poli</h2>
-                  <button id="btnClosePoliModal" type="button" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
-                </div>
+            <?php include __DIR__ . '/modals/modal_poli.php'; ?>
 
-                <form id="poliForm" method="post" class="space-y-4">
-                  <input type="hidden" name="action" id="poliFormAction" value="create">
-                  <input type="hidden" name="id_poli" id="poliFormId" value="">
-
-                  <div>
-                    <label class="block text-sm text-gray-700 mb-2">
-                        Nama Poli <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        name="nama_poli"
-                        id="field_poli_nama"
-                        value=""
-                        placeholder="Contoh: Poli Umum"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                        required
-                    >
-                  </div>
-
-                  <div>
-                    <label class="block text-sm text-gray-700 mb-2">
-                        Deskripsi
-                    </label>
-                    <textarea
-                        name="deskripsi"
-                        id="field_poli_deskripsi"
-                        rows="3"
-                        placeholder="Deskripsi singkat tentang poli"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none"
-                    ></textarea>
-                  </div>
-
-                  <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" id="btnCancelPoli" class="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl text-sm">Batal</button>
-                    <button type="submit" class="px-6 py-3 bg-green-500 text-white rounded-xl text-sm">Simpan</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- SEARCH + TABEL POLI -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-                <div class="p-6 border-b border-gray-100">
-                    <!-- toolbar moved above -->
-                </div>
+                <div class="p-6 border-b border-gray-100"></div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full">
@@ -368,65 +311,6 @@ if (isset($_SESSION['user_id'])) {
         </main>
     </div>
 </div>
-
-<script>
-(function () {
-  const modal = document.getElementById('poliModal');
-  const btnAdd = document.getElementById('btnAddPoli');
-  const btnClose = document.getElementById('btnClosePoliModal');
-  const btnCancel = document.getElementById('btnCancelPoli');
-  const form = document.getElementById('poliForm');
-  const formAction = document.getElementById('poliFormAction');
-  const formId = document.getElementById('poliFormId');
-  const title = document.getElementById('poliModalTitle');
-  const fieldNama = document.getElementById('field_poli_nama');
-  const fieldDeskripsi = document.getElementById('field_poli_deskripsi');
-
-  function openModal() {
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    window.scrollTo(0,0);
-  }
-  function closeModal() {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-
-  function clearForm() {
-    form.reset();
-    formAction.value = 'create';
-    formId.value = '';
-    title.textContent = 'Tambah Poli';
-  }
-
-  if (btnAdd) {
-    btnAdd.addEventListener('click', function () {
-      clearForm();
-      openModal();
-    });
-  }
-  if (btnClose) btnClose.addEventListener('click', closeModal);
-  if (btnCancel) btnCancel.addEventListener('click', closeModal);
-
-  document.querySelectorAll('.edit-poli-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const id = btn.getAttribute('data-id');
-      const nama = btn.getAttribute('data-nama') || '';
-      const deskripsi = btn.getAttribute('data-deskripsi') || '';
-      fieldNama.value = nama;
-      fieldDeskripsi.value = deskripsi;
-      formAction.value = 'update';
-      formId.value = id;
-      title.textContent = 'Edit Poli';
-      openModal();
-    });
-  });
-
-  modal.addEventListener('click', function (e) {
-    if (e.target === modal) closeModal();
-  });
-})();
-</script>
 
 </body>
 </html>

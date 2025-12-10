@@ -118,14 +118,27 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
             Edit Profil
         </a>
 
-        <a href="/kelompok/kelompok_04/public/logout.php"
-           class="block text-center bg-red-100 text-red-600 py-3 rounded-xl border border-red-200 hover:bg-red-200 transition">
-            Keluar
-        </a>
-
+        <button
+            type="button"
+            onclick="openLogoutModal()"
+            class="w-full bg-red-50 border-2 border-red-100 text-red-600 py-4 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center gap-2 text-sm">
+            <span class="w-5 h-5 rounded-full border border-red-400 flex items-center justify-center text-xs">&#8592;</span>
+            <span>Keluar</span>
+        </button>
         <p class="text-center text-xs text-gray-400 mt-6">
             Sistem Puskesmas v1.0.0
         </p>
+       
+<?php
+    $logoutAction = '../logout.php'; 
+    include __DIR__ . '/../partials/logout_modal.php';
+?>
+<script>
+function openEditModal() { document.getElementById('editModal').classList.remove('hidden'); }
+function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); }
+</script>
+
+
 
     </div>
 

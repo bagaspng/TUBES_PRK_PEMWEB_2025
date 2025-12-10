@@ -8,14 +8,14 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function require_login() {
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /kelompok/kelompok_04/public/login.php');
+        header('Location: ../login.php');
         exit;
     }
 }
 
 function require_role(array $roles) {
     if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $roles)) {
-        header('Location: /kelompok/kelompok_04/public/login.php');
+        header('Location: ../login.php');
         exit;
     }
 }
