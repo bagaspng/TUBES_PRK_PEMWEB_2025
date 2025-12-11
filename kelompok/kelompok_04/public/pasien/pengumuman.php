@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'pasien') {
     exit;
 }
 
-$sql = "SELECT id_pengumuman, judul, isi, gambar, tanggal
+$sql = "SELECT id_pengumuman, judul, isi, tanggal, gambar
         FROM pengumuman
         WHERE status = 'publish'
         ORDER BY tanggal DESC";
@@ -19,9 +19,9 @@ while ($row = $res->fetch_assoc()) {
     $artikel[] = $row;
 }
 
-function getImagePath($gambar) {
-    if (!empty($gambar) && file_exists(__DIR__ . '/../../' . $gambar)) {
-        return '../../' . $gambar;
+function getImage($a) {
+    if (!empty($a['gambar'])) {
+        return '../../' . $a['gambar'];
     }
     return 'https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200';
 }
@@ -61,9 +61,9 @@ function getImagePath($gambar) {
             <a href="pengumuman_detail.php?id=<?php echo $a['id_pengumuman']; ?>"
                class="block bg-white rounded-2xl shadow-sm hover:shadow-lg transition overflow-hidden border border-gray-200">
 
-                <div class="h-40 w-full overflow-hidden bg-gray-200">
-                    <img src="<?php echo getImagePath($a['gambar']); ?>"
-                         class="w-full h-full object-cover" alt="<?php echo htmlspecialchars($a['judul']); ?>"/>
+                <div class="h-40 w-full overflow-hidden">
+                    <img src="<?php echo getImage($a); ?>"
+                         class="w-full h-full object-cover" alt="Artikel"/>
                 </div>
 
                 <div class="p-4 space-y-2">

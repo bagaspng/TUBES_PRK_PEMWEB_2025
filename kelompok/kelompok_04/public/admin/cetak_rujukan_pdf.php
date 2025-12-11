@@ -279,7 +279,7 @@ $html = '
                 </td>
                 <td class="kop-info">
                     <h1>PUSKESMAS</h1>
-                    <p>Jl. Kesehatan No. 123, Bandarlampung, Lampung</p>
+                    <p>Jl. Kesehatan No. 123, Bandung, Jawa Barat</p>
                     <p>Telp: (022) 1234567 | Email: puskesmas@kesehatan.go.id</p>
                 </td>
             </tr>
@@ -398,7 +398,7 @@ $html = '
     <div class="ttd-section">
         <div class="ttd-box">
             <div class="ttd-tanggal">
-                Bandarlampung, ' . formatTanggalIndonesia($data['tanggal_rujukan']) . '<br>
+                Bandung, ' . formatTanggalIndonesia($data['tanggal_rujukan']) . '<br>
                 Dokter yang Merujuk,
             </div>
             <div class="ttd-nama">

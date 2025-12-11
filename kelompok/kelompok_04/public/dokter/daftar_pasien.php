@@ -12,7 +12,7 @@ if (isset($_GET['ajax_search'])) {
             JOIN jadwal_praktik j ON a.id_jadwal = j.id_jadwal
             JOIN dokter d ON j.id_dokter = d.id_dokter
             JOIN poli po ON d.id_poli = po.id_poli
-            WHERE DATE(a.waktu_daftar) = CURDATE()"; 
+            WHERE DATE(a.waktu_daftar) = CURDATE()"; //
 
     if (!empty($keyword)) {
         $safe_key = $conn->real_escape_string($keyword);

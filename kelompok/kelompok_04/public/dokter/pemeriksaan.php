@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($cek_hasil) {
                 $id_rekam = $cek_hasil['id_rekam'];
                 $stmt_rm = $conn->prepare("UPDATE rekam_medis 
-                                           SET td_sistolik=?, td_diastolik=?, suhu=?, nadi=?, rr=?, keluhan=?, diagnosa=?, resep_obat=?, pemeriksaan=?, updated_at=NOW()
+                                           SET td_sistolik=?, td_dioastolik=?, suhu=?, nadi=?, rr=?, keluhan=?, diagnosa=?, resep_obat=?, pemeriksaan=?, updated_at=NOW()
                                            WHERE id_rekam = ?");
                 $stmt_rm->bind_param("sssssssssi", $td_sistolik, $td_diastolik, $suhu, $nadi, $rr, $keluhan, $diagnosa, $resep, $tindakan, $id_rekam);
             } else {

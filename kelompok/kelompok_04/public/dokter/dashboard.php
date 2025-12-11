@@ -60,7 +60,7 @@ function getBadge($status) {
                 </div>
                 <div class="hidden md:block text-right">
                     <p class="text-sm font-bold text-gray-800"><?= htmlspecialchars($dokter['nama_dokter']) ?></p>
-                    <p class="text-xs text-gray-500"> <?= htmlspecialchars($dokter['kode_dokter']) ?></p>
+                    <p class="text-xs text-gray-500">NIP: <?= htmlspecialchars($dokter['kode_dokter']) ?></p>
                 </div>
             </div>
         </header>

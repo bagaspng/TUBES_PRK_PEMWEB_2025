@@ -25,9 +25,9 @@ if (!$artikel) {
     die("Pengumuman tidak ditemukan.");
 }
 
-function getImagePath($gambar) {
-    if (!empty($gambar) && file_exists(__DIR__ . '/../../' . $gambar)) {
-        return '../../' . $gambar;
+function getImage($artikel) {
+    if (!empty($artikel['gambar'])) {
+        return '../../' . $artikel['gambar'];
     }
     return 'https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200';
 }
@@ -59,9 +59,9 @@ function getImagePath($gambar) {
 
     <div class="max-w-2xl mx-auto pb-10">
 
-        <div class="w-full h-56 sm:h-72 overflow-hidden rounded-none bg-gray-200">
-            <img src="<?php echo getImagePath($artikel['gambar']); ?>"
-                 class="w-full h-full object-cover" alt="<?php echo htmlspecialchars($artikel['judul']); ?>">
+        <div class="w-full h-56 sm:h-72 overflow-hidden rounded-none">
+            <img src="<?php echo getImage($artikel); ?>"
+                 class="w-full h-full object-cover">
         </div>
 
         <div class="px-6 py-6 space-y-4">

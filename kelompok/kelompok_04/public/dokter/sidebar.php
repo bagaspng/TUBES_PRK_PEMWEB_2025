@@ -47,7 +47,7 @@ $page = basename($_SERVER['PHP_SELF']);
             </div>
             <div class="overflow-hidden">
                 <p class="text-sm font-semibold text-slate-700 truncate"><?= $user_login['nama_dokter'] ?? 'Dokter' ?></p>
-                <p class="text-[10px] text-slate-400 uppercase"><?= $user_login['kode_dokter'] ?? '-' ?></p>
+                <p class="text-[10px] text-slate-400 uppercase">NIP: <?= $user_login['kode_dokter'] ?? '-' ?></p>
             </div>
         </div>
         <button onclick="toggleLogoutModal(true)" class="flex items-center justify-center w-full py-2 text-xs text-red-500 font-medium bg-white border border-red-100 rounded-lg hover:bg-red-50 transition cursor-pointer shadow-sm">

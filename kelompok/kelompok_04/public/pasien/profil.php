@@ -53,31 +53,32 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
 
     <div class="max-w-2xl mx-auto px-6 py-8 space-y-8">
 
-        <div class="rounded-2xl p-6 text-white shadow-md bg-gradient-to-r flex items-center gap-4"
-             style="background-image: linear-gradient(to right, #45BC7D, #3aa668);">
+        <div class="bg-green-500 text-white rounded-2xl p-6 flex items-center gap-4 shadow-md">
 
-            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
-                <span class="text-3xl font-semibold">
-                    <?= strtoupper(substr($pasien['nama_lengkap'], 0, 1)) ?>
-                </span>
+            <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="currentColor" viewBox="0 0 512 512">
+                    <path d="M256 256a112 112 0 1 0-112-112 112.13 112.13 0 0 0 112 112Zm0 32
+                             c-70.7 0-208 35.82-208 107.5C48 417.89 56.35 432 77.74 432h356.52
+                             C455.65 432 464 417.89 464 395.5 464 323.82 326.7 288 256 288Z"/>
+                </svg>
             </div>
 
             <div>
-                <p class="text-white text-lg mb-1">
+                <p class="text-lg font-semibold">
                     <?= htmlspecialchars($pasien['nama_lengkap']) ?>
                 </p>
-                <p class="text-sm text-white/90">NIK: <?= htmlspecialchars($pasien['nik']) ?></p>
-                <p class="text-sm text-white/80">No. RM: <?= htmlspecialchars($pasien['no_rm']) ?></p>
+                <p class="text-sm opacity-90">NIK: <?= htmlspecialchars($pasien['nik']) ?></p>
+                <p class="text-sm opacity-90">BPJS: <?= htmlspecialchars($pasien['bpjs']) ?></p>
             </div>
 
         </div>
 
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 space-y-6">
 
-            <h3 class="text-gray-800 mb-4 text-base font-semibold">Informasi Kontak</h3>
+            <h2 class="text-gray-700 font-semibold text-sm">Informasi Kontak</h2>
 
-            <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 512 512">
                         <path d="M391.17 351.72c-15.29 0-33.12-2.78-53.16-8.26
                                  c-8.35-2.27-17.8-.55-23.32 5l-33.12 25.11
@@ -89,14 +90,14 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
                     </svg>
                 </div>
 
-                <div class="flex-1">
-                    <p class="text-xs text-gray-500 mb-1">Nomor Telepon</p>
+                <div>
+                    <p class="text-xs text-gray-500">Nomor Telepon</p>
                     <p class="text-sm text-gray-800"><?= htmlspecialchars($pasien['no_hp']) ?></p>
                 </div>
             </div>
 
-            <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 512 512">
                         <path d="M256 32C167.64 32 96 103.64 96 192c0 112 160 288 160 288
                                  s160-176 160-288C416 103.64 344.36 32 256 32Zm0 256
@@ -104,8 +105,8 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
                     </svg>
                 </div>
 
-                <div class="flex-1">
-                    <p class="text-xs text-gray-500 mb-1">Alamat</p>
+                <div>
+                    <p class="text-xs text-gray-500">Alamat</p>
                     <p class="text-sm text-gray-800"><?= htmlspecialchars($pasien['alamat']) ?></p>
                 </div>
             </div>
@@ -113,15 +114,15 @@ $pasien['alamat'] = $pasien['alamat'] ?? "-";
         </div>
 
         <a href="profil_edit.php"
-           class="block text-center text-white py-4 rounded-xl shadow-md transition-colors bg-gradient-to-r text-sm"
-           style="background-image: linear-gradient(to right, #45BC7D, #3aa668);">
+           class="block text-center bg-green-500 text-white py-3 rounded-xl shadow-md hover:bg-green-600 transition">
             Edit Profil
         </a>
 
         <button
             type="button"
             onclick="openLogoutModal()"
-            class="w-full bg-red-50 border-2 border-red-100 text-red-600 py-4 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center gap-2 text-sm">            
+            class="w-full bg-red-50 border-2 border-red-100 text-red-600 py-4 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center gap-2 text-sm">
+            <span class="w-5 h-5 rounded-full border border-red-400 flex items-center justify-center text-xs">&#8592;</span>
             <span>Keluar</span>
         </button>
         <p class="text-center text-xs text-gray-400 mt-6">
