@@ -1,0 +1,15 @@
+# Ignore VSCode editor settings
+.vscode/
+**/.vscode/
+
+# Ignore composer vendor directory
+vendor/
+
+# Ignore uploads if needed
+uploads/
+
+# System & temporary files
+*.log
+*.DS_Store
+*.cache
+*.tmp
