@@ -134,8 +134,12 @@ Admin menangani pengelolaan data dan konfigurasi sistem.
 4. Mengatur konfigurasi layanan klinik
 
 ---
-# Struktur Folder
 
+## Struktur Folder
+
+Berikut adalah struktur direktori utama dari Sistem Informasi Puskesmas:
+
+```
 public/
 │
 ├── admin/
@@ -192,6 +196,7 @@ src/
 └── helpers/
     ├── auth.php
     └── icon_helper.php
+```
 
 # Instalasi Sistem
 
