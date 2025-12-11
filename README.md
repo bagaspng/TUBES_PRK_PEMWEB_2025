@@ -169,14 +169,14 @@ public/
 │
 ├── pasien/
 │   ├── forgot_password.php
-│   ├── index.php       ← halaman dashboard pasien
+│   ├── index.php
 │   ├── login.php
 │   ├── logout.php
 │   ├── register.php
 │   └── reset_password.php
 │
 ├── img/
-│   └── (icon + asset images)
+│   └── (asset icon dan gambar)
 │
 └── partials/
     ├── footer.php
