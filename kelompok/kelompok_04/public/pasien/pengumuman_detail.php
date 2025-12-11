@@ -25,15 +25,11 @@ if (!$artikel) {
     die("Pengumuman tidak ditemukan.");
 }
 
-function getImage($id) {
-    $images = [
-        "https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200",
-        "https://images.unsplash.com/photo-1625134673337-519d4d10b313?q=80&w=1200",
-        "https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1200",
-        "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=1200",
-        "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200",
-    ];
-    return $images[$id % count($images)];
+function getImagePath($gambar) {
+    if (!empty($gambar) && file_exists(__DIR__ . '/../../' . $gambar)) {
+        return '../../' . $gambar;
+    }
+    return 'https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200';
 }
 ?>
 <!DOCTYPE html>
@@ -63,9 +59,9 @@ function getImage($id) {
 
     <div class="max-w-2xl mx-auto pb-10">
 
-        <div class="w-full h-56 sm:h-72 overflow-hidden rounded-none">
-            <img src="<?php echo getImage($id); ?>"
-                 class="w-full h-full object-cover">
+        <div class="w-full h-56 sm:h-72 overflow-hidden rounded-none bg-gray-200">
+            <img src="<?php echo getImagePath($artikel['gambar']); ?>"
+                 class="w-full h-full object-cover" alt="<?php echo htmlspecialchars($artikel['judul']); ?>">
         </div>
 
         <div class="px-6 py-6 space-y-4">

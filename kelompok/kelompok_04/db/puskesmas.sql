@@ -220,6 +220,8 @@ CREATE TABLE `rekam_medis` (
   `resep_obat` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `td_sistolik` VARCHAR(10) NULL,
+  `td_diastolik` VARCHAR(10) NULL,
   `tensi` VARCHAR(50) NOT NULL DEFAULT '-', 
   `suhu` VARCHAR(20) NOT NULL DEFAULT '-', 
   `nadi` VARCHAR(20) NOT NULL DEFAULT '-', 

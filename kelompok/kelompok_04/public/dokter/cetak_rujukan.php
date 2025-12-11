@@ -5,7 +5,6 @@ require_once __DIR__ . '/../../src/config/database.php';
 // Cek Login
 if (!isset($_SESSION['user_id'])) { die("Akses ditolak"); }
 
-// Ambil Data Dokter yang sedang login
 $user_id = $_SESSION['user_id'];
 $stmt = $conn->prepare("SELECT * FROM dokter WHERE id_user = ?");
 $stmt->bind_param("i", $user_id);

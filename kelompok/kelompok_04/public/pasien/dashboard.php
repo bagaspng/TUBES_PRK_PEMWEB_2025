@@ -209,7 +209,7 @@ while ($row = $resJDok->fetch_assoc()) {
 }
 $stmtJDok->close();
 
-$sqlPeng = "SELECT id_pengumuman, judul, isi, tanggal
+$sqlPeng = "SELECT id_pengumuman, judul, isi, gambar, tanggal
             FROM pengumuman
             WHERE status = 'publish'
             ORDER BY tanggal DESC
@@ -219,6 +219,13 @@ $artikel = [];
 while ($row = $resPeng->fetch_assoc()) {
     $row['ringkasan'] = mb_strimwidth(strip_tags($row['isi']), 0, 80, '...');
     $artikel[] = $row;
+}
+
+function getImagePath($gambar) {
+    if (!empty($gambar) && file_exists(__DIR__ . '/../../' . $gambar)) {
+        return '../../' . $gambar;
+    }
+    return 'https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=200';
 }
 
 $sqlRM = "SELECT r.id_rekam, r.tanggal_kunjungan, r.diagnosa, d.nama_dokter
@@ -482,15 +489,24 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
                 <?php if ($artikel): ?>
                     <?php foreach ($artikel as $item): ?>
                         <a href="pengumuman_detail.php?id=<?php echo $item['id_pengumuman']; ?>"
-                           class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow block">
-                            <div class="flex justify-between items-start mb-2">
-                                <p class="text-sm text-gray-800 pr-4"><?php echo htmlspecialchars($item['judul']); ?></p>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 flex-shrink-0" viewBox="0 0 512 512" fill="currentColor">
-                                    <path d="M184 112l144 144-144 144"/>
-                                </svg>
+                           class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow block overflow-hidden">
+                            <div class="flex gap-3">
+                                <div class="w-24 h-24 flex-shrink-0 bg-gray-200">
+                                    <img src="<?php echo getImagePath($item['gambar']); ?>" 
+                                         class="w-full h-full object-cover" 
+                                         alt="<?php echo htmlspecialchars($item['judul']); ?>">
+                                </div>
+                                <div class="flex-1 p-4 pl-0">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <p class="text-sm text-gray-800 pr-4 line-clamp-2"><?php echo htmlspecialchars($item['judul']); ?></p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 flex-shrink-0" viewBox="0 0 512 512" fill="currentColor">
+                                            <path d="M184 112l144 144-144 144"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2 line-clamp-2"><?php echo htmlspecialchars($item['ringkasan']); ?></p>
+                                    <p class="text-xs text-gray-400"><?php echo date('d M Y', strtotime($item['tanggal'])); ?></p>
+                                </div>
                             </div>
-                            <p class="text-xs text-gray-500 mb-2"><?php echo htmlspecialchars($item['ringkasan']); ?></p>
-                            <p class="text-xs text-gray-400"><?php echo date('d M Y', strtotime($item['tanggal'])); ?></p>
                         </a>
                     <?php endforeach; ?>
                 <?php else: ?>
