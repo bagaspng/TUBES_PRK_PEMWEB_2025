@@ -133,9 +133,13 @@ Admin menangani pengelolaan data dan konfigurasi sistem.
 3. Melihat daftar pengguna sistem
 4. Mengatur konfigurasi layanan klinik
 
-Struktur Folder
+---
+
+## Struktur Folder
+
 Berikut adalah struktur direktori utama dari Sistem Informasi Puskesmas:
 
+```
 public/
 │
 ├── admin/
@@ -192,67 +196,117 @@ src/
 └── helpers/
     ├── auth.php
     └── icon_helper.php
-Instalasi Sistem
-1. Clone Repository
+```
+
+# Instalasi Sistem
+
+## 1. Clone Repository
+
+```bash
 git clone <repository-url>
 cd sistem-puskesmas
-2. Konfigurasi Database
-Buat database baru di MySQL/MariaDB (misal nama: puskesmas_db).
-Import file SQL yang ada pada folder project (biasanya bernama database.sql atau sejenisnya).
-Sesuaikan koneksi database pada file konfigurasi:
+```
+
+## 2. Konfigurasi Database
+
+1. Buat database baru di MySQL/MariaDB (misal nama: `puskesmas_db`).
+2. Import file SQL yang ada pada folder project (biasanya bernama `database.sql` atau sejenisnya).
+3. Sesuaikan koneksi database pada file konfigurasi:
+
 Contoh PHP Native:
 
+```
 config/database.php
+```
+
 Contoh CodeIgniter:
 
+```
 app/Config/Database.php
+```
+
 Contoh Node.js:
 
+```
 config/db.js
+```
+
 Atur sesuai kebutuhan:
 
+```
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=
 DB_NAME=puskesmas_db
-3. Menjalankan Server
-Jika PHP Native / CI / tanpa framework:
+```
+
+## 3. Menjalankan Server
+
+### Jika PHP Native / CI / tanpa framework:
+
 Jalankan melalui XAMPP / Laragon:
 
-Pindahkan folder project ke:
+1. Pindahkan folder project ke:
+
+```
 htdocs/   (untuk XAMPP)
 www/      (untuk WAMP)
-Start Apache dan MySQL
-Akses aplikasi melalui browser:
+```
+
+2. Start Apache dan MySQL
+3. Akses aplikasi melalui browser:
+
+```
 http://localhost/sistem-puskesmas
-Jika berbasis Node.js:
+```
+
+### Jika berbasis Node.js:
+
 Jalankan:
 
+```bash
 npm install
 npm start
+```
+
 Akses aplikasi:
 
+```
 http://localhost:3000
-Cara Menjalankan Aplikasi
-1. Persiapan
-Pastikan web server aktif (Apache/Nginx)
-Pastikan database sudah terhubung
-Pastikan semua file konfigurasi sudah benar
-2. Jalankan Sistem
+```
+
+---
+
+# Cara Menjalankan Aplikasi
+
+## 1. Persiapan
+
+* Pastikan web server aktif (Apache/Nginx)
+* Pastikan database sudah terhubung
+* Pastikan semua file konfigurasi sudah benar
+
+## 2. Jalankan Sistem
+
 Akses melalui browser:
 
+```
 http://localhost/sistem-puskesmas
-3. Login Pengguna
+```
+
+## 3. Login Pengguna
+
 Jika terdapat akun default (bergantung pada database.sql):
 
-Admin
+**Admin**
 
-Username: admin
-Password: admin123 (contoh)
-Dokter
+* Username: admin
+* Password: admin123 *(contoh)*
 
-Username: dokter1
-Password: dokter123 (contoh)
-Pasien
+**Dokter**
 
-Registrasi langsung melalui halaman pendaftaran
+* Username: dokter1
+* Password: dokter123 *(contoh)*
+
+**Pasien**
+
+* Registrasi langsung melalui halaman pendaftaran
