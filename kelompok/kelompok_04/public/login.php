@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password   = trim($_POST['password'] ?? '');
 
     if ($identifier === '' || $password === '') {
-        $error = 'NIK / Username dan password wajib diisi.';
+        $error = 'Username dan password wajib diisi.';
     } else {
  
         $sql = "SELECT *
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit;
         } else {
-            $error = 'NIK / Username atau password salah.';
+            $error = 'Username atau password salah.';
         }
 
         $stmt->close();
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input
                     type="text"
                     name="username"
-                    placeholder="NIK/Username"
+                    placeholder="Username"
                     value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>"
                     class="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent transition-all text-sm"
                     required

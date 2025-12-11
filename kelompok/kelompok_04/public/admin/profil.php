@@ -81,7 +81,7 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
     ?>
 
     <main class="flex-1 items-center pb-6 w-full" style="max-width: 80rem;">
-        <!-- Topbar -->
+   
         <header class="w-full px-4 md:px-8 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-semibold text-gray-800">Profil Admin</h1>
@@ -93,7 +93,7 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
         </header>
 
         <main class="max-w-2xl mx-auto px-6 py-8 space-y-8">
-            <!-- Flash message -->
+
             <?php if ($msg = get_flash('success')): ?>
                 <div class="mb-4 px-4 py-3 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100">
                     <?php echo htmlspecialchars($msg); ?>
@@ -105,7 +105,6 @@ $roleAdmin   = ucfirst($user['role'] ?? 'admin');
                 </div>
             <?php endif; ?>
 
-            <!-- Header -->
             <div class="mb-6">
                 <h1 class="text-gray-800 mb-2 text-xl">Profil Admin</h1>
                 <p class="text-sm text-gray-500">Informasi profil administrator</p>

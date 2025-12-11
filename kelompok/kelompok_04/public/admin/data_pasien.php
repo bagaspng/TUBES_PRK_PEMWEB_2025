@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'create') {
         $nama           = trim($_POST['nama_lengkap'] ?? '');
         $nik            = trim($_POST['nik'] ?? '');
-        $no_rm          = trim($_POST['no_rm'] ?? '');
+        $username       = trim($_POST['username'] ?? '');
         $tanggal_lahir  = trim($_POST['tanggal_lahir'] ?? '');
         $jenis_kelamin  = trim($_POST['jenis_kelamin'] ?? '');
         $email          = trim($_POST['email'] ?? '');
         $password       = trim($_POST['password'] ?? '');
 
-        if ($nama === '' || $nik === '' || $no_rm === '' || $tanggal_lahir === '' || $jenis_kelamin === '' || $email === '' || $password === '') {
+        if ($nama === '' || $nik === '' || $username === '' || $tanggal_lahir === '' || $jenis_kelamin === '' || $email === '' || $password === '') {
             set_flash('error', 'Semua field bertanda * wajib diisi.');
         } else {
             $conn->begin_transaction();
@@ -45,10 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sqlUser = "INSERT INTO users (username, password_hash, email, role, status, created_at, updated_at)
                             VALUES (?, ?, ?, 'pasien', 'active', NOW(), NOW())";
                 $stmtUser = $conn->prepare($sqlUser);
-                $stmtUser->bind_param('sss', $no_rm, $hash, $email);
+                $stmtUser->bind_param('sss', $username, $hash, $email);
                 $stmtUser->execute();
                 $id_user = $stmtUser->insert_id;
                 $stmtUser->close();
+
+                // Auto-generate No. RM dengan format RM-YYYYMMDD-{id_user}
+                $no_rm = 'RM-' . date('Ymd') . '-' . $id_user;
 
                 $sqlPasien = "INSERT INTO pasien (id_user, no_rm, nik, nama_lengkap, tanggal_lahir, jenis_kelamin, created_at, updated_at)
                               VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
@@ -58,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtPasien->close();
 
                 $conn->commit();
-                set_flash('success', 'Pasien baru berhasil ditambahkan.');
+                set_flash('success', 'Pasien baru berhasil ditambahkan dengan No. RM: ' . $no_rm);
             } catch (Exception $e) {
                 $conn->rollback();
                 set_flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -73,12 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_pasien      = (int)($_POST['id_pasien'] ?? 0);
         $nama           = trim($_POST['nama_lengkap'] ?? '');
         $nik            = trim($_POST['nik'] ?? '');
-        $no_rm          = trim($_POST['no_rm'] ?? '');
+        $username       = trim($_POST['username'] ?? '');
         $tanggal_lahir  = trim($_POST['tanggal_lahir'] ?? '');
         $jenis_kelamin  = trim($_POST['jenis_kelamin'] ?? '');
         $email          = trim($_POST['email'] ?? '');
 
-        if (!$id_pasien || $nama === '' || $nik === '' || $no_rm === '' || $tanggal_lahir === '' || $jenis_kelamin === '' || $email === '') {
+        if (!$id_pasien || $nama === '' || $nik === '' || $username === '' || $tanggal_lahir === '' || $jenis_kelamin === '' || $email === '') {
             set_flash('error', 'Data tidak lengkap untuk update pasien.');
         } else {
             $conn->begin_transaction();
@@ -97,15 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $sqlUser = "UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id_user = ?";
                     $stmtUser = $conn->prepare($sqlUser);
-                    $stmtUser->bind_param('ssi', $no_rm, $email, $id_user);
+                    $stmtUser->bind_param('ssi', $username, $email, $id_user);
                     $stmtUser->execute();
                     $stmtUser->close();
 
                     $sqlPasien = "UPDATE pasien 
-                                  SET no_rm = ?, nik = ?, nama_lengkap = ?, tanggal_lahir = ?, jenis_kelamin = ?, updated_at = NOW()
+                                  SET nik = ?, nama_lengkap = ?, tanggal_lahir = ?, jenis_kelamin = ?, updated_at = NOW()
                                   WHERE id_pasien = ?";
                     $stmtPasien = $conn->prepare($sqlPasien);
-                    $stmtPasien->bind_param('sssssi', $no_rm, $nik, $nama, $tanggal_lahir, $jenis_kelamin, $id_pasien);
+                    $stmtPasien->bind_param('ssssi', $nik, $nama, $tanggal_lahir, $jenis_kelamin, $id_pasien);
                     $stmtPasien->execute();
                     $stmtPasien->close();
 
@@ -208,6 +211,7 @@ $sqlList = "
         p.tanggal_lahir,
         p.jenis_kelamin,
         u.email,
+        u.username,
         TIMESTAMPDIFF(YEAR, p.tanggal_lahir, CURDATE()) as usia
     FROM pasien p
     JOIN users u ON p.id_user = u.id_user
@@ -340,9 +344,17 @@ function formatTanggal($tanggal) {
                   </div>
 
                   <div>
-                    <label class="block text-sm text-gray-700 mb-2">No. Rekam Medis <span class="text-red-500">*</span></label>
-                    <input type="text" name="no_rm" id="field_norm" required
+                    <label class="block text-sm text-gray-700 mb-2">Username <span class="text-red-500">*</span></label>
+                    <input type="text" name="username" id="field_username" required
                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <p class="mt-1 text-xs text-gray-400">Username untuk login pasien</p>
+                  </div>
+
+                  <div id="noRmDisplay" class="hidden">
+                    <label class="block text-sm text-gray-700 mb-2">No. Rekam Medis</label>
+                    <input type="text" id="field_norm" readonly
+                           class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 cursor-not-allowed">
+                    <p class="mt-1 text-xs text-gray-400">Otomatis dibuat sistem</p>
                   </div>
 
                   <div>
@@ -388,6 +400,7 @@ function formatTanggal($tanggal) {
                         <thead class="bg-gray-50 border-b border-gray-100">
                             <tr>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">No. RM</th>
+                                <th class="px-6 py-4 text-left text-xs text-gray-600">Username</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Nama Lengkap</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">NIK</th>
                                 <th class="px-6 py-4 text-left text-xs text-gray-600">Tanggal Lahir</th>
@@ -403,6 +416,9 @@ function formatTanggal($tanggal) {
                                     <tr class="hover:bg-gray-50 text-sm">
                                         <td class="px-6 py-4 text-gray-800 font-medium">
                                             <?php echo htmlspecialchars($p['no_rm']); ?>
+                                        </td>
+                                        <td class="px-6 py-4 text-gray-700">
+                                            <?php echo htmlspecialchars($p['username']); ?>
                                         </td>
                                         <td class="px-6 py-4 text-gray-800">
                                             <?php echo htmlspecialchars($p['nama_lengkap']); ?>
@@ -430,6 +446,7 @@ function formatTanggal($tanggal) {
                                                     data-nama="<?php echo htmlspecialchars($p['nama_lengkap'], ENT_QUOTES); ?>"
                                                     data-nik="<?php echo htmlspecialchars($p['nik'], ENT_QUOTES); ?>"
                                                     data-norm="<?php echo htmlspecialchars($p['no_rm'], ENT_QUOTES); ?>"
+                                                    data-username="<?php echo htmlspecialchars($p['username'], ENT_QUOTES); ?>"
                                                     data-tgl="<?php echo htmlspecialchars($p['tanggal_lahir'], ENT_QUOTES); ?>"
                                                     data-jk="<?php echo htmlspecialchars($p['jenis_kelamin'], ENT_QUOTES); ?>"
                                                     data-email="<?php echo htmlspecialchars($p['email'], ENT_QUOTES); ?>">
@@ -446,7 +463,7 @@ function formatTanggal($tanggal) {
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="8" class="px-6 py-10 text-center text-gray-500 text-sm">
+                                    <td colspan="9" class="px-6 py-10 text-center text-gray-500 text-sm">
                                         Tidak ada data pasien.
                                     </td>
                                 </tr>
@@ -490,6 +507,8 @@ function formatTanggal($tanggal) {
     modal.classList.remove('flex');
   }
 
+  const noRmDisplay = document.getElementById('noRmDisplay');
+
   function clearForm() {
     form.reset();
     formAction.value = 'create';
@@ -497,6 +516,8 @@ function formatTanggal($tanggal) {
     title.textContent = 'Tambah Pasien';
     passwordField.style.display = 'block';
     inputPassword.required = true;
+    noRmDisplay.classList.add('hidden');
+    document.getElementById('field_username').parentElement.classList.remove('hidden');
   }
 
   if (btnAdd) {
@@ -514,6 +535,7 @@ function formatTanggal($tanggal) {
       document.getElementById('field_nama').value = btn.getAttribute('data-nama') || '';
       document.getElementById('field_nik').value = btn.getAttribute('data-nik') || '';
       document.getElementById('field_norm').value = btn.getAttribute('data-norm') || '';
+      document.getElementById('field_username').value = btn.getAttribute('data-username') || '';
       document.getElementById('field_tgl').value = btn.getAttribute('data-tgl') || '';
       document.getElementById('field_jk').value = btn.getAttribute('data-jk') || '';
       document.getElementById('field_email').value = btn.getAttribute('data-email') || '';
@@ -522,6 +544,8 @@ function formatTanggal($tanggal) {
       title.textContent = 'Edit Pasien';
       passwordField.style.display = 'none';
       inputPassword.required = false;
+      noRmDisplay.classList.remove('hidden');
+      document.getElementById('field_username').parentElement.classList.remove('hidden');
       openModal();
     });
   });

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../src/config/database.php';
+require_once __DIR__ . '/../../src/helpers/icon_helper.php';
 
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'pasien') {
     header('Location: ../login.php');
@@ -279,6 +280,10 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
     <title>Dashboard Pasien - Puskesmas Digital</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+    <style>
+        .icon-box { display: inline-flex; align-items: center; justify-content: center; }
+    </style>
 </head>
 <body class="min-h-screen bg-gray-50">
     <div class="bg-white border-b border-gray-100 sticky top-0 z-10">
@@ -320,40 +325,29 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
         <div>
             <div class="grid grid-cols-4 gap-4">
                 <button type="button" onclick="openAntrianModal()" class="flex flex-col items-center gap-2">
-                    <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
-                            <rect x="48" y="80" width="416" height="384" rx="48" ry="48" fill="none" stroke="currentColor" stroke-width="32"/>
-                            <path d="M128 48v64M384 48v64" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
-                            <path d="M464 160H48" fill="none" stroke="currentColor" stroke-width="32"/>
-                        </svg>
+                    <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow icon-box">
+                        <?php echo render_icon('calendar', 'fa', 'text-white text-2xl', 'Ambil Antrian'); ?>
                     </div>
                     <span class="text-xs text-gray-700 text-center">Antri</span>
                 </button>
 
                 <a href="#status-antrian" class="flex flex-col items-center gap-2">
-                    <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
-                            <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Zm0 96H224V336h32Z"/>
-                        </svg>
+                    <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow icon-box">
+                        <?php echo render_icon('info', 'fa', 'text-white text-2xl', 'Status Antrian'); ?>
                     </div>
                     <span class="text-xs text-gray-700 text-center">Status</span>
                 </a>
 
                 <a href="rekam_medis.php" class="flex flex-col items-center gap-2">
-                    <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
-                            <path d="M368 64H144a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V128ZM192 192h128M192 256h96M192 320h64" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
-                        </svg>
+                    <div class="w-14 h-14 bg-[#45BC7D] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow icon-box">
+                        <?php echo render_icon('clipboard-user', 'fa', 'text-white text-2xl', 'Rekam Medis'); ?>
                     </div>
                     <span class="text-xs text-gray-700 text-center">Rekam</span>
                 </a>
 
                 <a href="pengumuman.php" class="flex flex-col items-center gap-2">
-                    <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 512 512" fill="currentColor">
-                            <path d="M96 112h320v288a32 32 0 0 1-32 32H128a32 32 0 0 1-32-32Z" fill="none" stroke="currentColor" stroke-width="32"/>
-                            <path d="M160 160h192M160 208h192M160 256h128" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
-                        </svg>
+                    <div class="w-14 h-14 bg-[#496A9A] rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow icon-box">
+                        <?php echo render_icon('megaphone', 'fa', 'text-white text-2xl', 'Pengumuman'); ?>
                     </div>
                     <span class="text-xs text-gray-700 text-center">Pengumuman</span>
                 </a>

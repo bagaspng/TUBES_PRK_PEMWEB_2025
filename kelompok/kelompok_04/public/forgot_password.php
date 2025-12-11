@@ -7,24 +7,24 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
+    $email = trim($_POST['email'] ?? '');
 
-    if ($username === '') {
-        $error = 'Username wajib diisi.';
+    if ($email === '') {
+        $error = 'Email wajib diisi.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Format email tidak valid.';
     } else {
-        // Cek user berdasarkan username
-        $sql = "SELECT * FROM users WHERE username = ? LIMIT 1";
+        // Cek user berdasarkan email
+        $sql = "SELECT * FROM users WHERE email = ? LIMIT 1";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('s', $username);
+        $stmt->bind_param('s', $email);
         $stmt->execute();
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
 
         if (!$user) {
-            $error = 'Akun tidak ditemukan.';
-        } else if (empty($user['email'])) {
-            $error = 'Akun ini tidak memiliki email. Hubungi admin.';
+            $error = 'Email tidak terdaftar dalam sistem.';
         } else {
             // Generate token reset
             $token = bin2hex(random_bytes(32));
@@ -37,8 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            // URL link reset
-            $resetLink = "http://localhost/Tubes/public/reset_password.php?token=$token";
+            // URL link reset dengan base URL dinamis
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+            $host = $_SERVER['HTTP_HOST'];
+            $baseUrl = $protocol . "://" . $host . dirname($_SERVER['PHP_SELF']);
+            $resetLink = $baseUrl . "/reset_password.php?token=$token";
 
             // Kirim email
             $sendMail = sendResetEmail(
@@ -70,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h1 class="text-xl font-semibold text-gray-800 mb-4 text-center">Lupa Password</h1>
     <p class="text-gray-600 text-sm text-center mb-6">
-        Masukkan username Anda, kami akan mengirim link reset password ke email terdaftar.
+        Masukkan email Anda, kami akan mengirim link reset password ke email tersebut.
     </p>
 
     <?php if ($error): ?>
@@ -87,10 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form method="post" action="" class="space-y-4">
         <div>
+            <label class="block text-sm text-gray-700 mb-2">Email</label>
             <input
-                type="text"
-                name="username"
-                placeholder="Masukkan Username"
+                type="email"
+                name="email"
+                placeholder="contoh@email.com"
                 required
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
             />

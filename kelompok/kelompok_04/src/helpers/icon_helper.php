@@ -14,6 +14,8 @@ function get_icon_map() {
         'plus' => ['fa' => 'fa-solid fa-plus', 'ion' => 'add-outline'],
         'print' => ['fa' => 'fa-solid fa-print', 'ion' => 'print-outline'],
         'file-pdf' => ['fa' => 'fa-solid fa-file-pdf', 'ion' => 'document-outline'],
+        'info' => ['fa' => 'fa-solid fa-circle-info', 'ion' => 'information-circle'],
+        'clipboard-user' => ['fa' => 'fa-solid fa-clipboard-user', 'ion' => 'clipboard-outline'],
     ];
 }
 
