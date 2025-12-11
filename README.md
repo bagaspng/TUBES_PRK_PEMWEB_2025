@@ -134,6 +134,64 @@ Admin menangani pengelolaan data dan konfigurasi sistem.
 4. Mengatur konfigurasi layanan klinik
 
 ---
+# Struktur Folder
+
+public/
+│
+├── admin/
+│   ├── modals/
+│   │   ├── modal_dokter.php
+│   │   ├── modal_pengumuman.php
+│   │   └── modal_poli.php
+│   │
+│   ├── cetak_rujukan_pdf.php
+│   ├── dashboard.php
+│   ├── data_dokter.php
+│   ├── data_pasien.php
+│   ├── data_poli.php
+│   ├── jadwal_praktik.php
+│   ├── pengumuman.php
+│   ├── profil.php
+│   ├── rujukan.php
+│   └── sidebar.php
+│
+├── dokter/
+│   ├── cetak_rujukan.php
+│   ├── daftar_pasien.php
+│   ├── dashboard.php
+│   ├── detail_rekam_medis.php
+│   ├── header.php
+│   ├── pemeriksaan.php
+│   ├── profil_dokter.php
+│   ├── proses_pemeriksaan.php
+│   ├── rekam_medis.php
+│   └── sidebar.php
+│
+├── pasien/
+│   ├── forgot_password.php
+│   ├── index.php       ← halaman dashboard pasien
+│   ├── login.php
+│   ├── logout.php
+│   ├── register.php
+│   └── reset_password.php
+│
+├── img/
+│   └── (icon + asset images)
+│
+└── partials/
+    ├── footer.php
+    ├── header.php
+    └── logout_modal.php
+
+src/
+│
+├── config/
+│   ├── database.php
+│   └── mail.php
+│
+└── helpers/
+    ├── auth.php
+    └── icon_helper.php
 
 # Instalasi Sistem
 
