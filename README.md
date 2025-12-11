@@ -70,6 +70,15 @@ Admin menangani pengelolaan data dan konfigurasi sistem.
 
 ---
 
+## Kebutuhan Sistem
+
+* PHP 7.4+ atau PHP 8.x
+* MySQL / MariaDB
+* Apache (XAMPP / LAMPP / Laragon / WAMP)
+* Browser modern (Chrome, Firefox, Edge)
+
+---
+
 # Fitur Sistem
 
 ## Fitur Pasien
