@@ -67,7 +67,7 @@ $page = basename($_SERVER['PHP_SELF']);
         <div class="flex gap-3">
             <button onclick="toggleLogoutModal(false)" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition">Batal</button>
             
-            <a href="logout_dokter.php" class="flex-1 py-2.5 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition shadow-lg shadow-red-200">Ya, Keluar</a>
+            <a href="../logout.php" class="flex-1 py-2.5 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition shadow-lg shadow-red-200">Ya, Keluar</a>
         </div>
     </div>
 </div>
