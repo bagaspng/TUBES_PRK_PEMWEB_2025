@@ -368,58 +368,53 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
         </div>
 <div id="status-antrian">
     <?php if ($hasQueue): ?>
-        <?php 
-        $antrianUtama = $semuaAntrian[0]; 
-        ?>
-        <div class="bg-gradient-to-r from-[#45BC7D] to-[#3aa668] rounded-2xl p-6 text-white shadow-md">
-            <div class="flex items-start justify-between mb-4">
-                <div class="flex-1">
-                    <p class="text-sm opacity-90 mb-1">Antrian Anda</p>
-                    <div class="text-3xl font-semibold mb-2">
-                        <?php echo 'A-' . str_pad($antrianUtama['nomor_antrian'], 3, '0', STR_PAD_LEFT); ?>
+        <?php foreach ($semuaAntrian as $antrianUtama): ?>
+            <div class="bg-gradient-to-r from-[#45BC7D] to-[#3aa668] rounded-2xl p-6 text-white shadow-md mb-4">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <p class="text-sm opacity-90 mb-1">Antrian Anda</p>
+                        <div class="text-3xl font-semibold mb-2">
+                            <?php echo 'A-' . str_pad($antrianUtama['nomor_antrian'], 3, '0', STR_PAD_LEFT); ?>
+                        </div>
+                        <p class="text-sm opacity-90 mb-1">
+                            <?php echo htmlspecialchars($antrianUtama['nama_poli']); ?>
+                        </p>
+                        <p class="text-xs opacity-75">
+                            <?php echo htmlspecialchars($antrianUtama['nama_dokter']); ?>
+                        </p>
                     </div>
-                    <p class="text-sm opacity-90 mb-1">
-                        <?php echo htmlspecialchars($antrianUtama['nama_poli']); ?>
-                    </p>
-                    <p class="text-xs opacity-75">
-                        <?php echo htmlspecialchars($antrianUtama['nama_dokter']); ?>
-                    </p>
+                    <div class="bg-white/20 px-3 py-1 rounded-lg text-sm capitalize">
+                        <?php echo htmlspecialchars($antrianUtama['status']); ?>
+                    </div>
                 </div>
-                <div class="bg-white/20 px-3 py-1 rounded-lg text-sm capitalize">
-                    <?php echo htmlspecialchars($antrianUtama['status']); ?>
+                <div class="space-y-2 text-sm border-t border-white/20 pt-3">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Z"/>
+                        </svg>
+                        <span>
+                            Slot: <?php echo date('l, d M Y', strtotime($antrianUtama['waktu_daftar'])); ?> (<?php echo htmlspecialchars($antrianUtama['jam_mulai']); ?> - <?php echo htmlspecialchars($antrianUtama['jam_selesai']); ?>)
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Z"/>
+                        </svg>
+                        <span>
+                            Estimasi Tunggu: <?php echo $antrianUtama['estimasi_menit'] !== null ? $antrianUtama['estimasi_menit'] . ' menit' : '-'; ?>
+                        </span>
+                    </div>
+                    <?php if ($antrianUtama['antrian_saat_ini'] !== null): ?>
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48Zm95.6 145.6-112 112a16 16 0 0 1-22.6 0l-56-56a16 16 0 0 1 22.6-22.6L232 274.34l100.69-100.68a16 16 0 0 1 22.6 22.6Z"/>
+                        </svg>
+                        <span>Antrian Dipanggil: <?php echo 'A-' . str_pad($antrianUtama['antrian_saat_ini'], 3, '0', STR_PAD_LEFT); ?></span>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
-            
-            <div class="space-y-2 text-sm border-t border-white/20 pt-3">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
-                        <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Z"/>
-                    </svg>
-                    <span>
-                        Jam Praktik: <?php echo substr($antrianUtama['jam_mulai'], 0, 5) . ' - ' . substr($antrianUtama['jam_selesai'], 0, 5); ?>
-                    </span>
-                </div>
-                
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
-                        <path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64Zm16 208H224V144h32Z"/>
-                    </svg>
-                    <span>
-                        Estimasi Tunggu: <?php echo $antrianUtama['estimasi_menit'] !== null ? $antrianUtama['estimasi_menit'] . ' menit' : '-'; ?>
-                    </span>
-                </div>
-                
-                <?php if ($antrianUtama['antrian_saat_ini'] !== null): ?>
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512" fill="currentColor">
-                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48Zm95.6 145.6-112 112a16 16 0 0 1-22.6 0l-56-56a16 16 0 0 1 22.6-22.6L232 274.34l100.69-100.68a16 16 0 0 1 22.6 22.6Z"/>
-                    </svg>
-                    <span>Antrian Dipanggil: <?php echo 'A-' . str_pad($antrianUtama['antrian_saat_ini'], 3, '0', STR_PAD_LEFT); ?></span>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
+        <?php endforeach; ?>
     <?php else: ?>
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
             <div class="flex flex-col items-center text-center">
@@ -555,7 +550,25 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
         
         <form method="post" action="" class="p-6 space-y-5">
             <input type="hidden" name="action" value="ambil_antrian">
-            <input type="hidden" name="tanggal" value="<?php echo date('Y-m-d'); ?>">
+            <?php
+            $hariIndo = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            $today = date('Y-m-d');
+            $now = strtotime($today);
+            $dayOfWeek = date('w', $now); // 0=Minggu, 1=Senin, ..., 6=Sabtu
+            $options = [];
+            for ($i = $dayOfWeek; $i <= 6; $i++) {
+                $date = date('Y-m-d', strtotime("+".($i-$dayOfWeek)." day", $now));
+                $options[] = ['label' => $hariIndo[$i], 'value' => $date];
+            }
+            ?>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Hari <span class="text-red-500">*</span></label>
+                <select name="tanggal" id="selectHari" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent">
+                    <?php foreach ($options as $opt): ?>
+                        <option value="<?php echo $opt['value']; ?>" <?php echo $opt['value'] === $today ? 'selected' : ''; ?>><?php echo $opt['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
             <div class="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-4">
                 <div class="flex items-center gap-3">
@@ -567,7 +580,7 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs text-blue-600 mb-0.5">Antrian Hari Ini</p>
+                        <p class="text-xs text-blue-600 mb-0.5">Antrian Tanggal</p>
                         <p class="text-sm font-semibold text-blue-900" id="hariInfo"></p>
                     </div>
                 </div>
@@ -644,6 +657,7 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
     const summaryBox = document.getElementById('summaryBox');
     const summaryPoli = document.getElementById('summaryPoli');
     const summaryJam = document.getElementById('summaryJam');
+    const selectHari = document.getElementById('selectHari');
 
     const mapHari = {
         0: 'Minggu', 1: 'Senin', 2: 'Selasa', 3: 'Rabu',
@@ -677,11 +691,20 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
     }
 
     function updateHariInfo() {
-        const tgl = today.getDate();
-        const bln = bulanIndo[today.getMonth()];
-        const thn = today.getFullYear();
-        
-        hariInfo.textContent = `${namaHari}, ${tgl} ${bln} ${thn}`;
+        const selectHari = document.getElementById('selectHari');
+        const hariInfo = document.getElementById('hariInfo');
+        if (selectHari && hariInfo) {
+            const tanggalVal = selectHari.value;
+            if (tanggalVal) {
+                const dateObj = new Date(tanggalVal);
+                const hariIdx = dateObj.getDay();
+                const namaHari = mapHari[hariIdx];
+                const tgl = dateObj.getDate();
+                const bln = bulanIndo[dateObj.getMonth()];
+                const thn = dateObj.getFullYear();
+                hariInfo.textContent = `${namaHari}, ${tgl} ${bln} ${thn}`;
+            }
+        }
     }
 
     function updateSummary() {
@@ -697,8 +720,19 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
         }
     }
 
+    function getNamaHariIndo(dateStr) {
+        const date = new Date(dateStr);
+        const hariIdx = date.getDay();
+        return mapHari[hariIdx];
+    }
+
     function updateJamList() {
         const poliId = selectPoli.value;
+        const tanggalVal = selectHari.value;
+        let hariJadwal = namaHari;
+        if (tanggalVal) {
+            hariJadwal = getNamaHariIndo(tanggalVal);
+        }
 
         jamList.innerHTML = '';
         jamKosong.classList.add('hidden');
@@ -715,8 +749,8 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
             return;
         }
 
-        // Filter jadwal berdasarkan hari ini
-        const jadwalFiltered = jadwalPerPoli[poliId].filter(j => j.hari === namaHari);
+        // Filter jadwal berdasarkan hari yang dipilih
+        const jadwalFiltered = jadwalPerPoli[poliId].filter(j => j.hari === hariJadwal);
 
         if (jadwalFiltered.length === 0) {
             jamKosong.classList.remove('hidden');
@@ -725,11 +759,9 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
         }
 
         jamContainer.classList.remove('hidden');
-        
         jadwalFiltered.forEach((jadwal, index) => {
             const jamMulai = jadwal.jam_mulai.substring(0, 5);
             const jamSelesai = jadwal.jam_selesai.substring(0, 5);
-            
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-[#45BC7D] hover:bg-[#45BC7D]/5 transition-all text-left flex items-center justify-between group';
@@ -749,29 +781,27 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
                     <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm95.6 145.6-112 112a16 16 0 0 1-22.6 0l-56-56a16 16 0 0 1 22.6-22.6L232 274.34l100.69-100.68a16 16 0 0 1 22.6 22.6Z"/>
                 </svg>
             `;
-            
             btn.addEventListener('click', function() {
-                // Remove active state from all buttons
                 document.querySelectorAll('#jamList button').forEach(b => {
                     b.classList.remove('border-[#45BC7D]', 'bg-[#45BC7D]/10');
                     b.querySelector('.check-icon').classList.add('hidden');
                 });
-                
-                // Add active state to clicked button
                 this.classList.add('border-[#45BC7D]', 'bg-[#45BC7D]/10');
                 this.querySelector('.check-icon').classList.remove('hidden');
-                
-                // Set hidden input value
                 inputJamMulai.value = jadwal.jam_mulai;
                 btnSubmit.disabled = false;
                 updateSummary();
             });
-            
             jamList.appendChild(btn);
         });
     }
 
     selectPoli.addEventListener('change', () => {
+        updateJamList();
+        updateSummary();
+    });
+    selectHari.addEventListener('change', () => {
+        updateHariInfo();
         updateJamList();
         updateSummary();
     });
