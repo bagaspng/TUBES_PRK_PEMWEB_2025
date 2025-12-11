@@ -106,7 +106,7 @@ if (!$rm) {
                 <?php if (!empty($rm['rr'])): ?>
                 <p><span class="font-semibold">Pernapasan:</span><br>
                     <?php echo nl2br(htmlspecialchars($rm['rr'])); ?>
-                    <span class="font"> frekuensi</span>
+                    <span class="font"> x/menit</span>
                 </p>
                 <?php endif; ?>
 

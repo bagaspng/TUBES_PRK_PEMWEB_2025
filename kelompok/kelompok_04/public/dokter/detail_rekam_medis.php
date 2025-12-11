@@ -75,18 +75,18 @@ $umur = date_diff(date_create($data['tanggal_lahir']), date_create('today'))->y;
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Tekanan Darah</label>
-                        <input type="text" value="<?= $data['td_sistolik'] ?> / <?= $data['td_diastolik'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">                    </div>
+                        <input type="text" value="<?= $data['td_sistolik'] ?> / <?= $data['td_diastolik'] ?> mmHg" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">                    </div>
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Suhu Tubuh</label>
-                        <input type="text" value="<?= $data['suhu'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
+                        <input type="text" value="<?= $data['suhu'] ?> °C" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Nadi</label>
-                        <input type="text" value="<?= $data['nadi'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
+                        <input type="text" value="<?= $data['nadi'] ?> bpm" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Pernapasan</label>
-                        <input type="text" value="<?= $data['rr'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
+                        <input type="text" value="<?= $data['rr'] ?> x/menit" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
                     </div>
                 </div>
             </div>

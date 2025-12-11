@@ -37,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            // URL link reset
-            $resetLink = "http://localhost/Tubes/public/reset_password.php?token=$token";
+            // URL link reset otomatis
+            $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+            $resetLink = $baseUrl . "/reset_password.php?token=$token";
 
             // Kirim email
             $sendMail = sendResetEmail(

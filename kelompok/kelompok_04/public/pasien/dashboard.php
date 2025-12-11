@@ -35,9 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'ambil
     $jam_mulai_post  = trim($_POST['jam_mulai'] ?? '');
     $tanggal_post    = trim($_POST['tanggal'] ?? '');
 
+    // CEK: pasien sudah punya antrian aktif di hari ini?
+    $sqlCheckHari = "SELECT id_antrian FROM antrian WHERE id_pasien = ? AND DATE(waktu_daftar) = ? AND status IN ('menunggu','diperiksa') LIMIT 1";
+    $stmtCheckHari = $conn->prepare($sqlCheckHari);
+    $stmtCheckHari->bind_param('is', $pasien['id_pasien'], $tanggal_post);
+    $stmtCheckHari->execute();
+    $stmtCheckHari->store_result();
+    if ($stmtCheckHari->num_rows > 0) {
+        $bookingError = 'Anda sudah mengambil antrian hari ini.';
+    }
+    $stmtCheckHari->close();
+
     if ($id_poli_post <= 0 || $jam_mulai_post === '' || $tanggal_post === '') {
         $bookingError = 'Semua field wajib diisi untuk ambil antrian.';
-    } else {
+    } else if ($bookingError === '') {
 
         $timestamp = strtotime($tanggal_post);
         $hariIdx = date('N', $timestamp); 

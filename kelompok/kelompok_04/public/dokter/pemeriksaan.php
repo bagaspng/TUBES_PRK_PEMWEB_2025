@@ -335,7 +335,7 @@ if (isset($_SESSION['error'])) {
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nadi</label>
-                                <input type="text" name="nadi" value="<?= htmlspecialchars($data_draft['nadi'] ?? '') ?>" placeholder="80 x/menit" 
+                                <input type="text" name="nadi" value="<?= htmlspecialchars($data_draft['nadi'] ?? '') ?>" placeholder="80 bpm" 
                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent">
                             </div>
                             <div>

@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'pasien') {
     exit;
 }
 
-$sql = "SELECT id_pengumuman, judul, isi, tanggal
+$sql = "SELECT id_pengumuman, judul, isi, tanggal, gambar
         FROM pengumuman
         WHERE status = 'publish'
         ORDER BY tanggal DESC";
@@ -19,16 +19,11 @@ while ($row = $res->fetch_assoc()) {
     $artikel[] = $row;
 }
 
-function getImage($id) {
-    $images = [
-        "https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200",
-        "https://images.unsplash.com/photo-1625134673337-519d4d10b313?q=80&w=1200",
-        "https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200",
-        "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=1200",
-        "https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1200",
-        "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200",
-    ];
-    return $images[$id % count($images)];
+function getImage($a) {
+    if (!empty($a['gambar'])) {
+        return '../../' . $a['gambar'];
+    }
+    return 'https://images.unsplash.com/photo-1580281658627-7665a298f61a?q=80&w=1200';
 }
 ?>
 <!DOCTYPE html>
@@ -67,7 +62,7 @@ function getImage($id) {
                class="block bg-white rounded-2xl shadow-sm hover:shadow-lg transition overflow-hidden border border-gray-200">
 
                 <div class="h-40 w-full overflow-hidden">
-                    <img src="<?php echo getImage($idx); ?>"
+                    <img src="<?php echo getImage($a); ?>"
                          class="w-full h-full object-cover" alt="Artikel"/>
                 </div>
 
