@@ -41,7 +41,8 @@ $sqlRujukan = "
         rm.keluhan,
         rm.pemeriksaan,
         rm.resep_obat,
-        rm.tensi,
+        rm.td_sistolik,
+        rm.td_diastolik,
         rm.suhu,
         rm.nadi,
         rm.rr

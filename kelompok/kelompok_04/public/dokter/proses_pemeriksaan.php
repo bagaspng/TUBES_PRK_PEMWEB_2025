@@ -9,7 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $id_antrian = $_POST['id_antrian'];
 $id_pasien  = $_POST['id_pasien'];
-$tensi      = $_POST['tensi'];
+$td_sistolik= $_POST['td_sistolik'];
+$td_diastolik= $_POST['td_diastolik'];
 $suhu       = $_POST['suhu'];
 $nadi       = $_POST['nadi'];
 $rr         = $_POST['rr'];
@@ -41,22 +42,22 @@ try {
         $id_rekam = $row['id_rekam'];
         
         $stmt = $conn->prepare("UPDATE rekam_medis SET 
-            tensi=?, suhu=?, nadi=?, rr=?, 
+            td_sistolik=?, suhu=?, nadi=?, rr=?, 
             keluhan=?, diagnosa=?, resep_obat=?, pemeriksaan=?, 
             updated_at=?
             WHERE id_rekam=?");
-        $stmt->bind_param("sssssssssi", 
-            $tensi, $suhu, $nadi, $rr, 
+        $stmt->bind_param("ssssssssssi", 
+            $td_sistolik,$td_diastolik, $suhu, $nadi, $rr, 
             $keluhan, $diagnosa, $resep, $tindakan, 
             $tgl_sekarang, $id_rekam
         );
     } else {
         $stmt = $conn->prepare("INSERT INTO rekam_medis 
-            (id_antrian, id_pasien, id_dokter, id_poli, tanggal_kunjungan, tensi, suhu, nadi, rr, keluhan, diagnosa, resep_obat, pemeriksaan, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iiiisssssssssss", 
+            (id_antrian, id_pasien, id_dokter, id_poli, tanggal_kunjungan, td_sistolik, td_diastolik, suhu, nadi, rr, keluhan, diagnosa, resep_obat, pemeriksaan, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iiiissssssssssss", 
             $id_antrian, $id_pasien, $id_dokter, $id_poli, $tgl_kunjungan,
-            $tensi, $suhu, $nadi, $rr, 
+            $td_sistolik,$td_diastolik,$suhu, $nadi, $rr, 
             $keluhan, $diagnosa, $resep, $tindakan, 
             $tgl_sekarang, $tgl_sekarang
         );
