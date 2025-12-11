@@ -11,8 +11,8 @@ $page = basename($_SERVER['PHP_SELF']);
 <aside class="w-64 h-screen bg-white border-r border-slate-200 flex flex-col justify-between flex-shrink-0 sticky top-0 z-40">
     <div>
         <div class="p-6 flex items-center gap-3">
-            <div class="bg-emerald-500 p-2 rounded-lg shadow-sm">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <div class="w-10 h-10 flex">
+                <img src="../img/puskesmas.svg" alt="Logo Puskesmas" class="w-full h-full object-contain drop-shadow-lg">
             </div>
             <div>
                 <h1 class="text-lg font-bold text-slate-800">Puskesmas</h1>

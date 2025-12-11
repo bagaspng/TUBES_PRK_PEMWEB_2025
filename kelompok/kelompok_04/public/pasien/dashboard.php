@@ -67,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'ambil
         } else {
             $id_jadwal = (int) $jadwal['id_jadwal'];
 
-            // Cek apakah pasien sudah punya antrian aktif di jadwal dan tanggal yang sama
             $sqlCheck = "SELECT id_antrian 
                          FROM antrian 
                          WHERE id_pasien = ? 
@@ -94,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'ambil
                         AND DATE(a.waktu_daftar) = ?";
         
             $stmtMax = $conn->prepare($sqlMaxNo);
-            $stmtMax->bind_param('is', $id_poli_post, $tanggal_post);  // ← HARUS id_poli_post
+            $stmtMax->bind_param('is', $id_poli_post, $tanggal_post); 
             $stmtMax->execute();
             $resMax = $stmtMax->get_result();
             $rowMax = $resMax->fetch_assoc();
@@ -105,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'ambil
                 $now = date('Y-m-d H:i:s');
                 $waktu_daftar = $tanggal_post . ' ' . date('H:i:s');
 
-                // Insert antrian baru
                 $sqlIns = "INSERT INTO antrian
                            (id_jadwal, id_pasien, nomor_antrian, waktu_daftar, status, created_at, updated_at)
                            VALUES (?, ?, ?, ?, 'menunggu', ?, ?)";
@@ -124,7 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'ambil
     }
 }
 
-// Ambil SEMUA antrian aktif 
 $today = date('Y-m-d');
 $sqlAntrian = "SELECT a.*, 
                       p.nama_poli,
@@ -150,9 +147,8 @@ while ($row = $resAntri->fetch_assoc()) {
 $stmtAntri->close();
 $hasQueue = count($semuaAntrian) > 0;
 
-// Hitung estimasi untuk setiap antrian
 foreach ($semuaAntrian as &$antrian) {
-    // Cari antrian saat ini untuk jadwal tersebut
+
     $sqlCurr = "SELECT MIN(nomor_antrian) AS curr_no
                 FROM antrian
                 WHERE id_jadwal = ?
@@ -176,7 +172,6 @@ foreach ($semuaAntrian as &$antrian) {
     }
 }
 
-// Data jadwal hari ini
 $hariIdx = date('N');
 $mapHari = [
     1 => 'Senin', 2 => 'Selasa', 3 => 'Rabu', 4 => 'Kamis',
@@ -280,13 +275,19 @@ $jadwalPerPoliJson = json_encode($jadwalPerPoli);
 </head>
 <body class="min-h-screen bg-gray-50">
     <div class="bg-white border-b border-gray-100 sticky top-0 z-10">
-        <div class="px-6 py-4 flex justify-between items-center max-w-2xl mx-auto">
-            <h2 class="text-gray-800 font-semibold">Puskesmas</h2>
-            <a href="profil.php">
+        <div class="px-6 py-4 flex items-center max-w-2xl mx-auto">
+            <div class="w-10 h-10 flex">
+                <img src="../img/puskesmas.svg" alt="Logo Puskesmas" class="w-full h-full object-contain drop-shadow-lg">
+            </div>
+                <h2 class="text-gray-800 font-semibold">Puskesmas</h2>
+                <div class="flex items-center ml-auto">
+                <a href="profil.php">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-600" viewBox="0 0 512 512" fill="currentColor">
                     <path d="M256 256a112 112 0 1 0-112-112 112.13 112.13 0 0 0 112 112Zm0 32c-70.7 0-208 35.82-208 107.5 0 21.39 8.35 36.5 29.74 36.5h356.52C455.65 432 464 416.89 464 395.5 464 323.82 326.7 288 256 288Z"/>
                 </svg>
-            </a>
+                </a>
+                </div>
+            </div>
         </div>
     </div>
 

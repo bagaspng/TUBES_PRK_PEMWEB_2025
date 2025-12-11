@@ -32,7 +32,7 @@ if ($id_antrian > 0) {
 
 $pasien = null;
 if ($id_antrian > 0) {
-    $stmt_pasien = $conn->prepare("SELECT a.*, p.*, po.nama_poli, rm.id_rekam, rm.tensi, rm.suhu, rm.nadi, rm.rr, rm.keluhan, rm.diagnosa, rm.resep_obat, rm.pemeriksaan
+    $stmt_pasien = $conn->prepare("SELECT a.*, p.*, po.nama_poli, rm.id_rekam, rm.td_sistolik, rm.td_diastolik, rm.suhu, rm.nadi, rm.rr, rm.keluhan, rm.diagnosa, rm.resep_obat, rm.pemeriksaan
                                     FROM antrian a 
                                     JOIN pasien p ON a.id_pasien = p.id_pasien 
                                     JOIN jadwal_praktik j ON a.id_jadwal = j.id_jadwal
@@ -47,7 +47,8 @@ if ($id_antrian > 0) {
     if ($pasien && $pasien['id_rekam']) {
         $id_rekam = (int)$pasien['id_rekam'];
         $data_draft = [
-            'tensi' => $pasien['tensi'],
+            'td_sistolik' => $pasien['td_sistolik'],
+            'td_diastolik' => $pasien['td_diastolik'],
             'suhu' => $pasien['suhu'],
             'nadi' => $pasien['nadi'],
             'rr' => $pasien['rr'],
@@ -73,7 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'simpan_draft') {
         $id_antrian = (int)$_POST['id_antrian'];
-        $td = $_POST['td'] ?? '-';
+        $td_sistolik = $_POST['td_sistolik'] ?? '-';
+        $td_diastolik = $_POST['td_diastolik'];
         $suhu = $_POST['suhu'] ?? '-';
         $nadi = $_POST['nadi'] ?? '-';
         $rr = $_POST['rr'] ?? '-';
@@ -104,13 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($cek_hasil) {
                 $id_rekam = $cek_hasil['id_rekam'];
                 $stmt_rm = $conn->prepare("UPDATE rekam_medis 
-                                           SET tensi=?, suhu=?, nadi=?, rr=?, keluhan=?, diagnosa=?, resep_obat=?, pemeriksaan=?, updated_at=NOW()
+                                           SET td_sistolik=?, td_dioastolik=?, suhu=?, nadi=?, rr=?, keluhan=?, diagnosa=?, resep_obat=?, pemeriksaan=?, updated_at=NOW()
                                            WHERE id_rekam = ?");
-                $stmt_rm->bind_param("ssssssssi", $td, $suhu, $nadi, $rr, $keluhan, $diagnosa, $resep, $tindakan, $id_rekam);
+                $stmt_rm->bind_param("sssssssssi", $td_sistolik, $td_diastolik, $suhu, $nadi, $rr, $keluhan, $diagnosa, $resep, $tindakan, $id_rekam);
             } else {
-                $stmt_rm = $conn->prepare("INSERT INTO rekam_medis (id_pasien, id_dokter, id_poli, id_antrian, tanggal_kunjungan, tensi, suhu, nadi, rr, keluhan, diagnosa, resep_obat, pemeriksaan, created_at, updated_at) 
-                                           VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
-                $stmt_rm->bind_param("iiiiisssssss", $id_pasien, $id_dokter, $id_poli, $id_antrian, $td, $suhu, $nadi, $rr, $keluhan, $diagnosa, $resep, $tindakan);
+                $stmt_rm = $conn->prepare("INSERT INTO rekam_medis (id_pasien, id_dokter, id_poli, id_antrian, tanggal_kunjungan, td_sistolik, td_diastolik, suhu, nadi, rr, keluhan, diagnosa, resep_obat, pemeriksaan, created_at, updated_at) 
+                                           VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
+                $stmt_rm->bind_param("iiiisssssssss", $id_pasien, $id_dokter, $id_poli, $id_antrian, $td_sistolik, $td_diastolik, $suhu, $nadi, $rr, $keluhan, $diagnosa, $resep, $tindakan);
             }
             
             if ($stmt_rm->execute()) {
@@ -315,11 +317,16 @@ if (isset($_SESSION['error'])) {
 
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
                         <h3 class="font-bold text-gray-800 text-lg mb-4">Tanda Vital</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Tekanan Darah</label>
-                                <input type="text" name="td" value="<?= htmlspecialchars($data_draft['tensi'] ?? '') ?>" placeholder="120/80 mmHg" 
-                                       class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent">
+                                <div class="flex items-center gap-2">
+                                    <input type="text" name="td_sistolik" value="<?= htmlspecialchars($data_draft['td_sistolik'] ?? '') ?>" placeholder="120" 
+                                           class="w-20 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent">
+                                    <span class="text-gray-500 font-bold">/</span>
+                                    <input type="text" name="td_diastolik" value="<?= htmlspecialchars($data_draft['td_diastolik'] ?? '') ?>" placeholder="80" 
+                                           class="w-20 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#45BC7D] focus:border-transparent">
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Suhu Tubuh</label>

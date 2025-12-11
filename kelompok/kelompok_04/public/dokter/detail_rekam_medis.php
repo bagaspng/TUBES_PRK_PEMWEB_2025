@@ -75,8 +75,7 @@ $umur = date_diff(date_create($data['tanggal_lahir']), date_create('today'))->y;
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Tekanan Darah</label>
-                        <input type="text" value="<?= $data['tensi'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
-                    </div>
+                        <input type="text" value="<?= $data['td_sistolik'] ?> / <?= $data['td_diastolik'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">                    </div>
                     <div>
                         <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Suhu Tubuh</label>
                         <input type="text" value="<?= $data['suhu'] ?>" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700">
@@ -129,8 +128,8 @@ $umur = date_diff(date_create($data['tanggal_lahir']), date_create('today'))->y;
                         <input type="text" value="<?= $rujukan['faskes_tujuan'] ?>" readonly class="w-full bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm text-blue-900 font-medium">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Alasan Rujukan</label>
-                        <textarea readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700"><?= $rujukan['alasan_rujukan'] ?></textarea>
+                        <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Poli Tujuan</label>
+                        <textarea readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700"><?= $rujukan['poli_tujuan'] ?></textarea>
                     </div>
                 </div>
             </div>

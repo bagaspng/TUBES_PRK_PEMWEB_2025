@@ -26,6 +26,9 @@ $stmt->execute();
 $rm = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
+$q_rujukan = $conn->query("SELECT * FROM rujukan WHERE id_rekam = '$id_rekam'");
+$rujukan = $q_rujukan->fetch_assoc();
+
 if (!$rm) {
     die("Rekam medis tidak ditemukan.");
 }
@@ -79,6 +82,34 @@ if (!$rm) {
                     <?php echo nl2br(htmlspecialchars($rm['keluhan'])); ?>
                 </p>
 
+                <?php if (!empty($rm['td_sistolik']) && ($rm['td_diastolik'])): ?>
+                <p><span class="font-semibold">Tensi:</span><br>
+                    <?php echo nl2br(htmlspecialchars($rm['td_sistolik'] . '/' . $rm['td_diastolik'])); ?>
+                    <span class="font"> mmHg</span>
+                </p>
+                <?php endif; ?>
+
+                <?php if (!empty($rm['suhu'])): ?>
+                <p><span class="font-semibold">Suhu:</span><br>
+                    <?php echo nl2br(htmlspecialchars($rm['suhu'])); ?>
+                    <span class="font"> °C</span>
+                </p>
+                <?php endif; ?>
+
+                <?php if (!empty($rm['nadi'])): ?>
+                <p><span class="font-semibold">Nadi:</span><br>
+                    <?php echo nl2br(htmlspecialchars($rm['nadi'])); ?>
+                    <span class="font"> bpm</span>
+                </p>
+                <?php endif; ?>
+
+                <?php if (!empty($rm['rr'])): ?>
+                <p><span class="font-semibold">Pernapasan:</span><br>
+                    <?php echo nl2br(htmlspecialchars($rm['rr'])); ?>
+                    <span class="font"> frekuensi</span>
+                </p>
+                <?php endif; ?>
+
                 <?php if (!empty($rm['riwayat_penyakit'])): ?>
                 <p><span class="font-semibold">Riwayat Penyakit:</span><br>
                     <?php echo nl2br(htmlspecialchars($rm['riwayat_penyakit'])); ?>
@@ -96,11 +127,28 @@ if (!$rm) {
                     <?php echo nl2br(htmlspecialchars($rm['resep_obat'])); ?>
                 </p>
                 <?php endif; ?>
-
             </div>
         </div>
-
+            <?php if ($rujukan): ?>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200">
+                <h4 class="font-bold text-slate-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Data Rujukan
+                </h4>
+                <div class="grid gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Rumah Sakit Tujuan</label>
+                        <input type="text" value="<?= $rujukan['faskes_tujuan'] ?>" readonly class="w-full bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm text-blue-900 font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 font-bold uppercase mb-1">Poli Tujuan</label>
+                        <textarea readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700"><?= $rujukan['poli_tujuan'] ?></textarea>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
     </div>
+    
 
 </body>
 </html>
