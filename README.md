@@ -1,175 +1,113 @@
-# 🔥 FINAL PROJECT
-
-## Praktikum Pemrograman Web
-
-### Laboratorium Teknik Komputer — Universitas Lampung
-
-![Status](https://img.shields.io/badge/CI-Structure%20Check-blue)
-![PRs](https://img.shields.io/badge/PR-Welcome-green)
-![GitHub](https://img.shields.io/badge/GitHub-Repository-black)
-
-Repositori ini digunakan sebagai **Tempat Pengumpulan Tugas Besar Praktikum Pemrograman Web**.  
-Setiap kelompok **WAJIB** mengikuti aturan, struktur folder, dan mekanisme CI yang berlaku.
+# Sistem Informasi Puskesmas
 
 ---
 
-## 📝 1. Mekanisme Pengumpulan
+Pendaftaran Pasien, Antrian, dan Rekam Medis
 
-### **1. Fork Repository**
+Sistem Informasi Puskesmas adalah aplikasi berbasis web yang digunakan untuk mendukung layanan Puskesmas dalam proses pendaftaran pasien, pengelolaan antrian, pemeriksaan, pembuatan rekam medis, serta pengaturan data tenaga kesehatan dan jadwal praktik. Sistem ini dirancang dengan pendekatan Role-Based Access Control (RBAC) sehingga hak akses antara Admin, Dokter, dan Pasien dibedakan dengan jelas.
+---
 
-Setiap ketua kelompok melakukan **fork** repository ini.
-
-### **2. Buat Folder Kelompok**
-
-Gunakan format:
-
-```bash
-kelompok/kelompok_XX/
-```
-
-Contoh:
-
-```bash
-kelompok/kelompok_04/
-```
-
-### **3. Struktur Wajib di Dalam Folder Kelompok**
-
-```bash
-kelompok_04/
-└── README.md # Dokumentasi + anggota kelompok
-```
-
-> **README.md wajib berisi:**
->
-> - Daftar anggota
-> - Judul & summary project
-> - Cara menjalankan aplikasi
-
-### **4. Push Perubahan ke Repo Fork**
-
-### **5. Buat Pull Request**
-
-Format judul PR:
-
-```
-
-[Kelompok-04] Nama Proyek
-
-```
-
-### **6. PR Akan Dicek Oleh CI**
-
-CI memverifikasi:
-
-- Struktur folder sesuai format
-- Hanya mengubah folder kelompok sendiri
-- File wajib tersedia
-- README tidak kosong
-- Tidak menyentuh folder/berkas milik kelompok lain
-
-Jika salah → **CI otomatis gagal & memberikan komentar.**
+### Penjelasan Use Case Berdasarkan Aktor
 
 ---
 
-## 🎯 2. Tema Final Project (pilih satu)
+## 1. Pasien
 
-| No  | Tema                                    | Deskripsi Singkat                        |
-| --- | --------------------------------------- | ---------------------------------------- |
-| 1   | **Good Governance**                     | Layanan publik, perizinan, sosial, pajak |
-| 2   | **Innovation in Health**                | Telemedicine, rekam medis, jadwal dokter |
-| 3   | **Innovation in Education**             | E-learning, aplikasi edukasi             |
-| 4   | **Digital Transformation for SMEs**     | POS, marketplace, inventori              |
-| 5   | **Community & Organization Management** | Sistem komunitas, voting, donasi         |
-| 6   | **Smart City & Environment**            | Pelaporan infrastruktur, lingkungan      |
+Pasien dapat mengakses berbagai layanan klinik secara digital.
 
----
+**Use Case Pasien:**
 
-## ⚙️ 3. Ketentuan Umum
-
-### **Persyaratan Teknis**
-
-- **Frontend:**
-  HTML5, CSS3 (Native/Tailwind/Bootstrap), JavaScript Native
-  _Tidak boleh memakai framework JS (React/Vue/Angular)._
-
-- **Backend:** PHP Native
-- **Database:** MySQL
-
-  - Wajib menyediakan ERD & SQL schema
-
-- **Version Control:** Git & GitHub
+* Registrasi
+* Login / Logout
+* Melihat Jadwal Dokter
+* Mengambil Antrian (berdasarkan poli dan jadwal)
+* Melihat Rekam Medis
+* Mengelola Profil
+* Melihat Pengumuman
 
 ---
 
-## 🚀 4. Fitur Wajib
+## 2. Dokter
 
-### **1. User Management**
+Dokter berfokus pada pengelolaan pemeriksaan dan rekam medis.
 
-- Login
-- Logout
-- Registrasi
-- Role / hak akses
+**Use Case Dokter:**
 
-### **2. Fitur Transaksi/Layanan**
+* Login / Logout
+* Melihat Daftar Pasien
+* Mengubah Status Antrian
+* Melakukan Pemeriksaan
 
-Contoh:
-
-- CRUD data
-- Proses transaksi
-- Validasi data
-- Pelaporan
+  * *Extend:* Membuat Rujukan
+* Mengelola Data Dokter (edit profil)
 
 ---
 
-## 📦 5. Deliverables
+## 3. Admin
 
-Setiap kelompok wajib mengumpulkan:
+Admin menangani pengelolaan data dan konfigurasi sistem.
 
-- Source code lengkap pada folder `src/`
-- File SQL database
-- ERD (PNG/JPG/PDF)
-- Screenshot aplikasi
-- README.md dalam folder kelompok:
-  - Instalasi & cara menjalankan
-  - Dokumentasi singkat
-- Presentasi & demo (opsional)
+**Use Case Admin:**
 
----
-
-## 📁 6. Struktur Repo
-
-```bash
-TUBES_PRK_PEMWEB_2025/
-│
-├── README.md
-├── .github/
-│ └── workflows/
-│ └── format-check.yml
-│
-└── kelompok/
-      └── kelompok_01/
-```
+* Login / Logout
+* Mengelola Data Dokter
+* Mengelola Data Pasien
+* Mengelola Data Poli
+* Mengelola Jadwal
+* Mengelola Pengumuman
 
 ---
 
-## ⚠️ 7. Aturan Tambahan
+# Fitur Sistem
 
-- Dilarang mengubah folder kelompok lain
-- Dilarang membuat folder di luar `kelompok/`
-- Nama folder tidak boleh diganti setelah dibuat
-- PR dengan struktur salah akan ditolak CI
+## Fitur Pasien
 
----
+* Registrasi dan Login
+* Pengambilan Antrian
+* Melihat Jadwal Dokter
+* Melihat Rekam Medis
+* Mengubah Profil
+* Melihat Pengumuman Klinik
 
-## 📞 8. Kontak Resmi
+## Fitur Dokter
 
-Silakan hubungi Asisten Praktikum jika ada kendala teknis terkait CI atau mekanisme pengumpulan.
+* Melihat Daftar Pasien
+* Mengubah Status Antrian
+* Mengisi Rekam Medis
+* Membuat Rujukan
+* Mengubah Profil Dokter
 
----
+## Fitur Admin
 
-### 🎉 Selamat mengerjakan!
+* Manajemen Data Dokter
+* Manajemen Data Pasien
+* Manajemen Data Poli
+* Manajemen Jadwal Praktik
+* Manajemen Pengumuman
 
-Gunakan Git dengan baik, commit secara bertahap, dan kerjakan proyek dengan rapi.
+# Cara Penggunaan Sistem
 
-> Laboratorium Teknik Komputer — Universitas Lampung
+## 1. Pasien
+
+1. Registrasi akun
+2. Login ke sistem
+3. Melihat jadwal dokter dan poli
+4. Mengambil antrian
+5. Melihat status rekam medis
+6. Mengakses pengumuman klinik
+
+## 2. Dokter
+
+1. Login menggunakan akun dokter
+2. Melihat daftar pasien pada hari tersebut
+3. Memperbarui status antrian
+4. Mengisi rekam medis saat pemeriksaan
+5. Membuat rujukan bila diperlukan
+6. Mengubah informasi profil dokter
+
+## 3. Admin
+
+1. Login sebagai admin
+2. Mengelola data dokter, pasien, poli, jadwal, dan pengumuman
+3. Melihat daftar pengguna sistem
+4. Mengatur konfigurasi layanan klinik
