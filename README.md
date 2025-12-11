@@ -1,11 +1,23 @@
 # Sistem Informasi Puskesmas
 
 ---
+# Kelompok 4
+Anggota:
+* Talitha Dalilah Difa	2315061012
+* Radhitya Agrayasa Rhalin	2315061002
+* Bagas Pangestu	2315061010
+* Anggriani Luthfiyah Ratu	2315061058
+
+---
 
 Pendaftaran Pasien, Antrian, dan Rekam Medis
 
 Sistem Informasi Puskesmas adalah aplikasi berbasis web yang digunakan untuk mendukung layanan Puskesmas dalam proses pendaftaran pasien, pengelolaan antrian, pemeriksaan, pembuatan rekam medis, serta pengaturan data tenaga kesehatan dan jadwal praktik. Sistem ini dirancang dengan pendekatan Role-Based Access Control (RBAC) sehingga hak akses antara Admin, Dokter, dan Pasien dibedakan dengan jelas.
+
 ---
+# Use Case Diagram
+![Use Case Sistem Informasi Puskesmas](https://github.com/user-attachments/assets/c74dc301-6dae-4a90-a745-40cff8edac06)
+
 
 ### Penjelasan Use Case Berdasarkan Aktor
 
