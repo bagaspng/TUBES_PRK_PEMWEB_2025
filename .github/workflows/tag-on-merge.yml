@@ -1,0 +1,86 @@
+name: Auto Tag & Release on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+jobs:
+  create_tag_and_release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Take kelompok label
+        id: label
+        run: |
+          # Get kelompok label with kelompok-XX pattern
+          LABEL=$(echo '${{ toJson(github.event.pull_request.labels) }}' | grep -o 'kelompok-[0-9][0-9]' | head -n 1)
+
+          if [ -z "$LABEL" ]; then
+            echo "Label kelompok tidak ditemukan. Pastikan workflow polisi-folder memberi label otomatis."
+            exit 1
+          fi
+
+          echo "label=$LABEL" >> $GITHUB_OUTPUT
+          echo "Ditemukan label: $LABEL"
+
+      - name: find README at kelompok_XX folder
+        id: folder
+        run: |
+          NUMBER=$(echo "${{ steps.label.outputs.label }}" | grep -o '[0-9][0-9]')
+          README_PATH="kelompok/kelompok_${NUMBER}/README.md"
+
+          if [ ! -f "$README_PATH" ]; then
+            echo "README.md is not found at: $README_PATH"
+            exit 1
+          fi
+
+          echo "readme=$README_PATH" >> $GITHUB_OUTPUT
+          echo "README finded at: $README_PATH"
+
+      - name: Read README Content (release notes)
+        id: notes
+        run: |
+          CONTENT=$(cat "${{ steps.folder.outputs.readme }}")
+
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Make a tag name
+        id: tag
+        run: |
+          LABEL="${{ steps.label.outputs.label }}"
+          DATE=$(date +"%Y%m%d")
+          TAG="${LABEL}-submission-${DATE}"
+
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Tag final: $TAG"
+
+      - name: Create Git Tag
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Release ${{ steps.tag.outputs.tag }}"
+          body: ${{ steps.notes.outputs.notes }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Success
+        run: echo "Release for tag ${{ steps.tag.outputs.tag }} has Successfully created"
